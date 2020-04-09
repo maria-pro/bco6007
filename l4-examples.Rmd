@@ -1,0 +1,131 @@
+---
+title: "BCO6007 Leture 4"
+author: "MariaProkofieva"
+date: "01/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE, message=FALSE, echo=FALSE, warning=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE,   
+                      message = FALSE,
+                      warning = FALSE,
+                      collapse = TRUE,
+                      fig.height = 4,
+                      fig.width = 8,
+                      fig.align = "center",
+                      cache = FALSE,
+                      comment = NA )
+
+library(tidyverse)
+library(ggplot2)
+
+```
+
+# Data Preparation and transformation
+
+## Objectives
+
+1. understand the concept of tidy data
+2. being able to prepare data for further analysis using `tidyverse`
+3. being able to use visualizations to check "preparation" of data
+4. use data wrangling approaches to transform the data to fit the needs of data analysis
+
+----------------
+
+*The examples are based on using `tidyverse` library, so you need to install it first if you have not! Uncomment the next `r` chunk and run it in your console*
+
+`install.packages("tidyverse")`
+
+----------------
+
+Let's load `tidyverse` library and load our data set
+
+
+```{r readgrad}
+library(tidyverse)
+grad <- read_csv("data/graduate-programs.csv")
+grad %>% top_n(10)
+```
+
+Let's count:
+
+```{r grad-count}
+head (grad)
+grad %>% count(subject)
+```
+
+Let's filter
+
+```{r grad-filter}
+grad %>%
+  filter(subject == "economics") %>%
+  summarise(meanStudents = mean(NumStud),
+          s = sd(NumStud))
+```
+
+Let's make a plot
+
+```{r grad-plot}
+grad %>%
+  filter(subject == "economics") %>%
+  ggplot(aes(x = NumStud, 
+             y = MedianTimetoDegree)) +
+  geom_point() + 
+  theme(aspect.ratio = 1)
+```
+
+
+## Tidy data
+
+Let's have a look at the data....
+
+```{r}
+table1
+
+table2
+
+table3
+
+table4a
+
+table4b
+```
+
+Which one is easier to use? E.g. for visualization:
+
+```{r}
+# Visualise changes over time
+library(ggplot2)
+ggplot(table1, aes(year, cases)) + 
+  geom_line(aes(group = country), colour = "grey50") + 
+  geom_point(aes(colour = country))
+```
+
+Let's tidy our dataset table4a
+
+```{r}
+
+table4a
+
+table4a %>% 
+  pivot_longer(c(`1999`, `2000`), names_to = "year", values_to = "cases")
+```
+
+Now, it's your turn to "tidy" `table4b`
+
+``` {r}
+table4b
+
+table4b %>% 
+  pivot_longer(c(`1999`, `2000`), names_to = "year", values_to = "population")
+```
+
+Now, let's have a look at `table2`
+
+```{r}
+table2
+
+table2 %>%
+    pivot_wider(names_from = type, values_from = count)
+```
