@@ -1,0 +1,176 @@
+---
+title: "BCO6007: Lab 4"
+author: "MariaProkofieva"
+date: "08/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE,messages=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Uncomment the next lines (remove the first #) to install the packages
+# install.packages(packages)
+# remotes::install_github("hrbrmstr/hrbrthemes")
+# Load standard packages
+library(tidyverse)
+theme_set(theme_light())
+
+```
+
+# Lab4: Data Preparation and transformation
+
+## Objectives
+
+1. understand the concept of tidy data
+2. being able to prepare data for further analysis using `tidyverse`
+3. being able to use visualizations to check "preparation" of data
+4. use data wrangling approaches to transform the data to fit the needs of data analysis
+
+----------------
+
+*The examples are based on using `tidyverse` library, so you need to install it first if you have not! Uncomment the next `r` chunk and run it in your console*
+
+----------------
+
+Use `install.packages("tidyverse")`
+
+Today we are going to work with one of the datasets from `Tidy Tuesday`. You can read about this fantastic project [here](https://github.com/rfordatascience/tidytuesday)
+
+and I highly encourage you to participate in their weekly challenges!
+
+Today, we are looking at one of the earlier ones [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-10-01). Let's have a look at it
+
+You can watch the [video](https://www.youtube.com/watch?v=yrZS8mGL-2E) about the dataset and presentation to demonstrate `ggplot2` library [here](https://raw.githack.com/ljanda/nyhackr_talk_2019_09_19/master/ny_hackr_talk_2019_09_19.html)
+
+
+
+```{r}
+pizza_jared <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_jared.csv")
+pizza_barstool <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_barstool.csv")
+pizza_datafiniti <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-10-01/pizza_datafiniti.csv")
+```
+
+Let's "shorten" our dataset by removing "spare" variables:
+
+```{r}
+pizza_short<- pizza_barstool %>%
+  select(name, city, price_level, provider_rating, provider_review_count)
+```
+
+Let's count how many different cities we have in the dataset:
+```{r}
+pizza_short%>%count(city)
+pizza_short%>%count(city, price_level)
+```
+
+Let's filter
+
+```{r}
+good_pizza<-pizza_short%>%
+  filter(provider_rating>4)
+
+really_bad_pizza<-pizza_short %>%
+  filter(provider_rating==2)
+```
+
+Let's group
+
+```{r}
+pizza_short%>%
+  group_by(city)
+```
+
+and summarize
+
+```{r}
+pizza_short%>%
+  group_by(city) %>%
+  summarise (mean_rating=mean(provider_rating), n=n())%>%
+  ungroup()
+
+
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+Let's get the top 50 reviews
+
+```{r}
+pizza_barstool %>%
+  top_n(50, review_stats_all_count) %>%
+  ggplot(aes(price_level, review_stats_all_average_score, group = price_level)) +
+  geom_boxplot()
+
+
+pizza_barstool %>%
+  filter(review_stats_all_count >= 50) %>%
+  mutate(name = fct_reorder(name, review_stats_all_average_score)) %>%
+  ggplot(aes(review_stats_all_average_score, name, size = review_stats_all_count)) +
+  geom_point() +
+  labs(x = "Average rating",
+       y = "",
+       size = "# of reviews",
+       title = "Barstool Sports ratings of pizza places",
+       subtitle = "Only places with at least 50 reviews")
+```
+
+```{r}
+pizza_barstool %>%
+  filter(review_stats_all_count >= 20) %>%
+  mutate(city = fct_lump(city, 3)) %>%
+  add_count(city) %>%
+  mutate(city = glue::glue("{ city } ({ n })")) %>%
+  ggplot(aes(city, review_stats_all_average_score)) +
+  geom_boxplot() +
+  labs(title = "Do pizza ratings differ across cities?",
+       subtitle = "Only pizza places with at least 20 reviews")
+```
+
+```{r}
+pizza_cleaned <- pizza_barstool %>%
+  select(place = name,
+         price_level,
+         contains("review")) %>%
+  rename_all(~ str_remove(., "review_stats_")) %>%
+  select(-contains("provider"))
+pizza_cleaned %>%
+  filter(critic_count > 0) %>%
+  ggplot(aes(critic_average_score, dave_average_score)) +
+  geom_point() +
+  geom_abline(color = "red") +
+  geom_smooth(method = "lm") +
+  labs(title = "Does Barstool Sports' Dave agree with the critics?",
+       x = "Critic average score",
+       y = "Dave score")
+```
+
+```{r}
+pizza_cleaned %>%
+  filter(community_count >= 20) %>%
+  ggplot(aes(community_average_score, dave_average_score)) +
+  geom_point(aes(size = community_count)) +
+  geom_abline(color = "red") +
+  geom_smooth(method = "lm") +
+  labs(size = "# of community reviews",
+       x = "Community score",
+       y = "Dave score")
+```
+
+Now it is your turn!
+
+Tasks:
+
+1. load the `avocado.csv` data
+2. count number of observations by region and by year
+3. filter observations for organic avocados and save them in a separate dataset
+4. what is the average price for the total dataset?
+What is the average price for each region?
+What is the average price for each region and year?
+5. create a separate variable called average price and add it to your "organic avocado" dataset.
