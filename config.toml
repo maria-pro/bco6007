@@ -1,10 +1,11 @@
 baseurl = "/"
 languageCode = "en-us"
-title = "A minimal Hugo website"
+title = "BCO6007 Business Analytics"
 theme = "hugo-xmin"
 googleAnalytics = ""
 disqusShortname = ""
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+#preserveTaxonomyNames = true
 footnotereturnlinkcontents = "↩"
 
 [permalinks]
@@ -16,21 +17,26 @@ footnotereturnlinkcontents = "↩"
     url = "/"
     weight = 1
 [[menu.main]]
-    name = "About"
-    url = "/about/"
+    name = "Book"
+    url = "https://r4ds.had.co.nz/"
     weight = 2
 [[menu.main]]
-    name = "Categories"
-    url = "/categories/"
+    name = "TidyTuesday"
+    url = "https://github.com/rfordatascience/tidytuesday"
     weight = 3
 [[menu.main]]
-    name = "Tags"
-    url = "/tags/"
+    name = "Tidyverse"
+    url = "https://www.tidyverse.org/"
     weight = 4
 [[menu.main]]
-    name = "Subscribe"
-    url = "/index.xml"
+    name = "Tidymodels"
+    url = "https://www.tidymodels.org/"
+    weight = 5
+[[menu.main]]
+    name = "RMarkdown"
+    url = "https://rmarkdown.rstudio.com/"
+    weight = 6    
 
 [params]
     description = "A website built through Hugo and blogdown."
-    footer = "&copy; [Yihui Xie](https://yihui.name) 2017 -- 2019 | [Github](https://github.com/yihui) | [Twitter](https://twitter.com/xieyihui)"
+    footer = "&copy; [Maria](https://marusse.com) 2020  | [Github](https://github.com/maria-pro) | [Twitter](https://twitter.com/m45hap)"
