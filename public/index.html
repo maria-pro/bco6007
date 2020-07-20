@@ -4,7 +4,7 @@
 	<meta name="generator" content="Hugo 0.73.0" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home | A minimal Hugo website</title>
+    <title>Home | BCO6007 Business Analytics</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -16,13 +16,15 @@
       
       <li><a href="/">Home</a></li>
       
-      <li><a href="/about/">About</a></li>
+      <li><a href="https://r4ds.had.co.nz/">Book</a></li>
       
-      <li><a href="/categories/">Categories</a></li>
+      <li><a href="https://github.com/rfordatascience/tidytuesday">TidyTuesday</a></li>
       
-      <li><a href="/tags/">Tags</a></li>
+      <li><a href="https://www.tidyverse.org/">Tidyverse</a></li>
       
-      <li><a href="/index.xml">Subscribe</a></li>
+      <li><a href="https://www.tidymodels.org/">Tidymodels</a></li>
+      
+      <li><a href="https://rmarkdown.rstudio.com/">RMarkdown</a></li>
       
     </ul>
     <hr/>
@@ -31,26 +33,99 @@
 
 
 
-<p><a href="https://github.com/yihui/hugo-xmin"><!-- raw HTML omitted --></a></p>
-<h1 id="hugo-xmin">HUGO XMIN</h1>
-<h2 id="_keep-it-simple-but-not-simpler_"><em>Keep it simple, but not simpler</em></h2>
-<p><strong>XMin</strong> is a Hugo theme written by <a href="https://yihui.name">Yihui Xie</a> in about four hours: half an hour was spent on the Hugo templates, and 3.5 hours were spent on styling. The main motivation for writing this theme was to provide a really minimal example to beginners of Hugo templates. This XMin theme contains about 130 lines of code in total, including the code in HTML templates and CSS (also counting empty lines).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">find . -not -path <span style="color:#e6db74">&#39;*/exampleSite/*&#39;</span> <span style="color:#ae81ff">\(</span> -name <span style="color:#e6db74">&#39;*.html&#39;</span> -o -name <span style="color:#e6db74">&#39;*.css&#39;</span> <span style="color:#ae81ff">\)</span> | xargs wc -l
-</code></pre></div><pre><code>       5 ./layouts/404.html
-      12 ./layouts/_default/single.html
-      20 ./layouts/_default/list.html
-      13 ./layouts/_default/terms.html
-       0 ./layouts/partials/foot_custom.html
-       0 ./layouts/partials/head_custom.html
-       9 ./layouts/partials/footer.html
-      20 ./layouts/partials/header.html
-      51 ./static/css/style.css
-       7 ./static/css/fonts.css
-     137 total
-</code></pre><p>I can certainly further reduce the code, for example, by eliminating the CSS, but I believe a tiny bit of CSS can greatly improve readability. You cannot really find many CSS frameworks that only contain 50 lines of code.</p>
-<p>Although it is a minimal theme, it is actually fully functional. It supports pages (including the home page), blog posts, a navigation menu, categories, tags, and RSS. With <a href="https://github.com/yihui/hugo-xmin/blob/master/exampleSite/layouts/partials/foot_custom.html">a little bit customization</a>, it can easily support LaTeX math expressions, e.g.,</p>
-<p><code>$${\sqrt {n}}\left(\left({\frac {1}{n}}\sum _{i=1}^{n}X_{i}\right)-\mu \right)\ {\xrightarrow {d}}\ N\left(0,\sigma ^{2}\right)$$</code></p>
-<p>All pages not under the root directory of the website are listed below. You can also visit the list page of a single section, e.g., <a href="/post/">posts</a>, or <a href="/note/">notes</a>. See the <a href="/about/">About</a> page for the usage of this theme.</p>
+<p><a href="https://www.vu.edu.au/"><!-- raw HTML omitted --></a></p>
+<h1 id="bco6007-business-analytics">BCO6007: Business Analytics</h1>
+<h2 id="semester-2-2020">Semester 2 2020</h2>
+<p>Unit coordinator: Maria Prokofieva (<a href="mailto:maria.prokofieva@vu.edu.au">maria.prokofieva@vu.edu.au</a>)
+All classes are conducted online via zoom. Please see VU Collaborate for the correct link to recurring classes.</p>
+<p>Note that classes are not recorded. It is highly advisable to come to EVERY class and practice (during lectures as well as during the tutorials).</p>
+<p><strong>Lecture notes</strong> lecture notes are provided as RMarkdown document and are required to be open in RStudio -&gt; Knit</p>
+<p>PDF version of lecture notes is also available.</p>
+<h2 id="topics">Topics</h2>
+<ol>
+<li>Introduction to business analytics</li>
+</ol>
+<ul>
+<li>basics of data analytics</li>
+<li>introduction to R/RStudio</li>
+<li>Basics of RMarkdown</li>
+<li>Projects and workflow</li>
+</ul>
+<ol start="2">
+<li>Basics of data viz</li>
+</ol>
+<ul>
+<li>Grammar of graphics</li>
+<li>ggplot2</li>
+<li>RMarkdown and data viz</li>
+</ul>
+<ol start="3">
+<li>Basics of data wrangling</li>
+</ol>
+<ul>
+<li>basics of tidy data approach, basic data wrangling
+tidyverse</li>
+</ul>
+<ol start="4">
+<li>Advanced data wrangling</li>
+</ol>
+<ul>
+<li>more tidyverse</li>
+</ul>
+<ol start="5">
+<li>Dealing with different datatypes</li>
+</ol>
+<ul>
+<li>tibbles</li>
+<li>factors</li>
+<li>date/times</li>
+<li>time series basics</li>
+</ul>
+<p>Assignment: data wrangling  - Tidy Tuesday style</p>
+<ol start="6">
+<li>Introduction to modeling</li>
+</ol>
+<ul>
+<li>Understanding the workflow</li>
+<li>tidymodels</li>
+<li>recipes</li>
+<li>data preprocessing</li>
+</ul>
+<ol start="7">
+<li>Further modeling</li>
+</ol>
+<ul>
+<li>Setting up the workflow</li>
+<li>Model building</li>
+</ul>
+<ol start="8">
+<li>Most common statistical models</li>
+</ol>
+<ul>
+<li>caret</li>
+<li>data analysis</li>
+</ul>
+<ol start="9">
+<li>Evaluation of models</li>
+</ol>
+<ul>
+<li>Working with multiple models</li>
+<li>More advanced modeling</li>
+<li>Feature selection</li>
+<li>Graphical representation of multiple models</li>
+</ul>
+<ol start="10">
+<li>Practical cases: working with text</li>
+</ol>
+<p>Assignment: model development - Tidy Tuesday style advanced</p>
+<ol start="11">
+<li>
+<p>Practical cases: interactive documents and dashboards</p>
+</li>
+<li>
+<p>Presentation</p>
+</li>
+</ol>
 
 
 <ul>
@@ -92,7 +167,7 @@
 
   
   <hr/>
-  © <a href="https://yihui.name">Yihui Xie</a> 2017 &ndash; 2019 | <a href="https://github.com/yihui">Github</a> | <a href="https://twitter.com/xieyihui">Twitter</a>
+  © <a href="https://marusse.com">Maria</a> 2020  | <a href="https://github.com/maria-pro">Github</a> | <a href="https://twitter.com/m45hap">Twitter</a>
   
   </footer>
   </body>
