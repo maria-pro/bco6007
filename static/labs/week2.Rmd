@@ -1,8 +1,8 @@
 ---
-title: "Week 1 Tutorial"
+title: "Week 2 Tutorial"
 author: "Maria Prokofieva"
 date: "15/01/2020"
-output: html_document
+output: pdf_document
 ---
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, warning = FALSE}
@@ -20,16 +20,16 @@ knitr::opts_chunk$set(
 library(emo)
 ```
 
-## Week 1:
+## Week 2: Basics of data viz
 
-This week we are getting into basics: how to R
+This week we are getting into data viz with R. We already started working with RMarkdown - which is "file format" to present your data insights and communicate them to stakeholders
 
 A screencast of the tutorial is available [here](https://www.youtube.com/channel/UCTpTqzAm8DCANz7ifhRI-sA?disable_polymer=true):
 
 ### Things to cover:
 
-1. Setting up RStudio Cloud account [here]()
-2. Work through your `RStudio.cloud` account
+1. `ggplot2` library: install and start using
+2. 
 3. Work with 2 types of documents:
 - `R script`
 - `RMarkdown` document.
@@ -40,20 +40,27 @@ Remember: **This is not a programming unit! We focus on data and working with da
 
 
 ### What I need to learn:
-- how to get to RStudio Cloud and navigate there
-- how to create and work with `R script` files (basic)
-- how to create and work with `RMarkdown` files (basic)
-- how to create variables in R
-- how to load datasets to variables
-- how to load `pre-built` datasets
-- how to `have a look` at values in variables
+- work with `RMarkdown` documents with dataviz
+- install and load `ggplot2` library
+- work with layers in the grammar of gpaphics in `ggplot2`
+- create basics dataviz "shapes": e.g. histograms, line charts, etc. in `ggplot2`
+- use colour in your data viz in `ggplot2`
+- use themes in `ggplot2`
+- use legends, labels and axes names
+- use faceting and present multiple data insights on one data viz
 
 ### Resources
-Chapter 1 Getting Started with Data in R https://moderndive.netlify.app/1-getting-started.html
-Basic Basics https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/
-Workflow: basics https://r4ds.had.co.nz/workflow-basics.html
+ggplot2: Elegant Graphics for Data Analysis 
+https://ggplot2-book.org/ 
 
-### What is R?
+### Using data viz in `RMarkdown`
+
+This tutorial we are going to have a closer look at `RMarkdown` and put out data viz there
+
+### Task
+
+- create an RMarkdown document and select `html` as output - this tells R to create an `html document` when you knit it (you can later swap it to `Word document`)
+
 
 https://www.computerworld.com/article/2497143/business-intelligence/business-intelligence-beginner-s-guide-to-r-introduction.html
 
@@ -112,7 +119,7 @@ Your workspace may have 1+ **projects**
 
 - Create a ptoject called `BCO6007` and locate your files under the `Files` tab. 
 Make sure that you always work in the correct project for this class,
-`r emo::ji("smile")`
+
 
 ## R Script and RMarkdown documents
 
@@ -210,7 +217,7 @@ To view the data we can load it and use `head` function to have a look at first 
 
 You can also use `glimpse` function to get an idea of the variables in the data.
 
-```{r}
+```{r eval=FALSE}
 data(mtcars)
 head(mtcars) #let's have a look at mtcars dataset
 
@@ -224,7 +231,7 @@ Use `Help` window to locate docs on `glimpse` and `head`
 
 Some datasets are very very popular
 
-```{r}
+```{r eval=FALSE}
 library(gapminder)
 glimpse(gapminder)
 ```
@@ -234,7 +241,7 @@ Most of the time you work with datasets in files, e.g. `csv` or `excel`
 To load your files to us we are using one of the `tidyverse` functions (to be exact it is in `readr` library which is part of the very very very big library `tidyverse`)
 
 
-```{r}
+```{r eval=FALSE}
 #let load some data from TidyTuesday
 boston_cocktails <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-26/boston_cocktails.csv')
 glimpse(candy)

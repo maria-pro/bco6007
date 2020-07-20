@@ -2,7 +2,7 @@
 title: "Week 1 Tutorial"
 author: "Maria Prokofieva"
 date: "15/01/2020"
-output: html_document
+output: pdf_document
 ---
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, warning = FALSE}
@@ -50,8 +50,8 @@ Remember: **This is not a programming unit! We focus on data and working with da
 
 ### Resources
 Chapter 1 Getting Started with Data in R https://moderndive.netlify.app/1-getting-started.html
-
-
+Basic Basics https://rladiessydney.org/courses/ryouwithme/01-basicbasics-0/
+Workflow: basics https://r4ds.had.co.nz/workflow-basics.html
 
 ### What is R?
 
@@ -112,7 +112,7 @@ Your workspace may have 1+ **projects**
 
 - Create a ptoject called `BCO6007` and locate your files under the `Files` tab. 
 Make sure that you always work in the correct project for this class,
-`r emo::ji("smile")`
+
 
 ## R Script and RMarkdown documents
 
@@ -172,79 +172,116 @@ Please read [this section](https://r4ds.had.co.nz/workflow-basics.html) from "R 
 
 
 ## Working with packages (=libraries) 
+**Package** is a collection of some functions (=functionalities) and some datasets to try them. It is also called `library`
 
+Most of the time you work with packages, though some functions are pre-built in R. The ones we will be using in this unit most are `ggplot2`, `tidyverse` and `tidymodels`.
 
-## Exercise 4
+To use a package you need to **install* it (you do it only ONCE) and then *load* any time in your file when you want to use it.
+
+To install a package you need to use `install.packages(NameOfThePackage)`
+
+```{r eval=FALSE}
+install.packages(ggplot2)
+# by the way use # to include NOTES in your code
+```
+
+To load your package (=can call them library!) you need to do `library(NameOfThePackage)`
+
+```{r eval=FALSE}
+library(ggplot2)
+# by the way use # to include NOTES in your code
+```
+
+#### Tasks 
+Install and load the following packages: `tidyverse` and `tidymodels`
+
+### Questions
 
 - What's an R `package`?
 - How do you install a package?
-- How does the `library()` function relates to a `package`?
+- Why do you use the `library()` function ?
 - How often do you load a `package`?
-- Install and load the package `ISLR`
 
 ## Getting data
 
 Data can be found in R packages
 
-```{r}
+To view the data we can load it and use `head` function to have a look at first 6 rows of our data. 
+
+You can also use `glimpse` function to get an idea of the variables in the data.
+
+```{r eval=FALSE}
+data(mtcars)
+head(mtcars) #let's have a look at mtcars dataset
+
 library(tidyverse)
 data(economics, package = "ggplot2")
 # data frames are essentially a list of vectors
 glimpse(economics)
 ```
 
-These are not usually kept up to date but are good for practicing your analysis skills on.
+Use `Help` window to locate docs on `glimpse` and `head`
 
-Or in their own packages
+Some datasets are very very popular
 
-```{r}
+```{r eval=FALSE}
 library(gapminder)
 glimpse(gapminder)
 ```
 
-I primarily use the `readr` package (part of the `tidyverse` suite) for reading data now. It mimics the base R reading functions but is implemented in `C` so reads large files quickly, and it also attempts to identify the types of variables.
+Most of the time you work with datasets in files, e.g. `csv` or `excel`
 
-```{r}
-candy <- read_csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/candy-power-ranking/candy-data.csv")
+To load your files to us we are using one of the `tidyverse` functions (to be exact it is in `readr` library which is part of the very very very big library `tidyverse`)
+
+
+```{r eval=FALSE}
+#let load some data from TidyTuesday
+boston_cocktails <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-26/boston_cocktails.csv')
 glimpse(candy)
 ```
 
-You can pull data together yourself, or look at data compiled by someone else. 
+`TidyTuesday` is a weekly data project aimed at the R ecosystem. You can have a look at it [here](https://github.com/rfordatascience/tidytuesday)
 
-## Question 1
+To load an excel file you need to use `readxl` library (remember to install it first and then load)
 
-- Look at the `economics` data in the `ggplot2` package. Can you think of two questions you could answer using these variables?
 
-- Write these into your `.Rmd` file. 
+You can load this `us_avg_tuition.xlsx` file from `VU Collaborate ->Datasets` to your local computer and then upload it to your RStudio project. Let's assume that you upload it to the root folder
 
-## Question 2
+```{r eval=FALSE}
+#install.packages("readxl")
+library(readxl)
+tuition <- read_excel('us_avg_tuition.xlsx')
 
-- Read the documentation for `gapminder` data. Can you think of two questions you could answer using these variables?
+glimpse(tuition)
+```
 
-- Write these into your `.Rmd` file. 
 
-## Question 3
+To save the file you need to use  `write_csv()` function. Read the help on how to use it!
 
-- Read the documentation for `pedestrian sensor` data. Can you think of two questions you could answer using these variables?
+### RMarkdown document
 
-- Write these into your `.Rmd` file. 
+`RMarkdown` is a document that contains some `R code` (=R chunks) and normal text and graphics.
 
-## Question 4
+You can create `RMarkdown` document through File->New file->R Markdown. 
+Today your tutorial is in .rmd. 
 
-1. Read in the OECD PISA data (file `student_sub.rds` is available at from the course web site)
-2. Tabulate the countries (CNT)
-3. Extract the values for Australia (AUS) and Shanghai (QCN)
-4. Compute the average and standard deviation of the reading scores (PV1READ), for each country
-5. Write a few sentences explaining what you learn about reading in these two countries.
+### Task
+
+- Download your `week1.rmd` from `VU Collaborate` and upload it to your Rstudio.
+- Open the file and have a look
+
+We will work more closely with .rmd files later, but at this stage have a very brief look at syntax and how to *generate* the output for this file.
+
+Please `Knit` at the top and see what is going to happen! ~
+
+
+### Task
+- Read the help file about `gapminder` data. Have a closer look at the data and think about possible questions you can answer using it.
+
+- Locate this line in your .rmd document in RStudio and add your notes there!
+
 
 ## Homework
 
-Using your *free* DataCamp account, work your way through the free tutorial [Introduction to R](https://www.datacamp.com/courses/free-introduction-to-r). This provides some good insights on the data types you will commonly use in R.
-
-## Got a question?
-
-It is always good to try to solve your problem yourself first. Most likely the error is a simple one, like a missing ")" or ",". For deeper questions about packages, analyses and functions, making your Rmd into a document, or simply the error that is being generated, you can often google for an answer. Often, you will be directed to 
-[Q/A site: http://stackoverflow.com](http://stackoverflow.com).
-
-Stackoverflow is a great place to get answers to tougher questions about R and also data analysis. You always need to check that someone hasn't asked it before, the answer might already be available for you. If not, make a [reproducible example of your problem, following the guidelines here](https://reprex.tidyverse.org/articles/reprex-dos-and-donts.html) and ask away. Remember these people that kindly answer questions on stackoverflow have day jobs too, and do this community support as a kindness to all of us.
+Set up your  *free* DataCamp account and have a look at the free tutorial [Introduction to R](https://www.datacamp.com/courses/free-introduction-to-r) they offer. This provides some good insights on the data types you will commonly use in R.
 
