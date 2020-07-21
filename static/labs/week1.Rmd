@@ -2,7 +2,7 @@
 title: "Week 1 Tutorial"
 author: "Maria Prokofieva"
 date: "15/01/2020"
-output: pdf_document
+output: html_document
 ---
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, warning = FALSE}
