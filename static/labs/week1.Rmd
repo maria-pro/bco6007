@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
   fig.align = "center",
   cache = FALSE
 )
-library(emo)
 ```
 
 ## Week 1:
@@ -76,7 +75,6 @@ go to https://rstudio.cloud/ and create your account there. You can use ANY emai
 
 Optional: you can install a desktop version of RStudio from [here](https://rstudio.com/products/rstudio/download/#download). Make sure that you install R first from [here](https://cran.rstudio.com/) and then RStudio. This will allow you to run a copy of RStudio on your local computer.
 
-![RStudio Cloud interface.](../img/rstudio.png)
 
 The RStudio interface has the following components including:
 1. `Source editor` window` where you write and edit your files: 
