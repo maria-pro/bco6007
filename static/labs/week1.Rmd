@@ -179,7 +179,7 @@ To use a package you need to **install* it (you do it only ONCE) and then *load*
 To install a package you need to use `install.packages(NameOfThePackage)`
 
 ```{r eval=FALSE}
-install.packages(ggplot2)
+install.packages("ggplot2")
 # by the way use # to include NOTES in your code
 ```
 
