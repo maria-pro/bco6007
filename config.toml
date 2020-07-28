@@ -1,0 +1,45 @@
+baseurl = "/"
+languageCode = "en-us"
+title = "BCO6007 Business Analytics"
+theme = "hugo-xmin"
+googleAnalytics = ""
+disqusShortname = ""
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+#preserveTaxonomyNames = true
+footnotereturnlinkcontents = "↩"
+publishDir = "../maria-pro.github.io/bco6007"
+
+
+[permalinks]
+
+    post = "/post/:year/:month/:day/:slug/"
+    note = "/note/:year/:month/:day/:slug/"
+
+[[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+[[menu.main]]
+    name = "Book"
+    url = "https://r4ds.had.co.nz/"
+    weight = 2
+[[menu.main]]
+    name = "TidyTuesday"
+    url = "https://github.com/rfordatascience/tidytuesday"
+    weight = 3
+[[menu.main]]
+    name = "Tidyverse"
+    url = "https://www.tidyverse.org/"
+    weight = 4
+[[menu.main]]
+    name = "Tidymodels"
+    url = "https://www.tidymodels.org/"
+    weight = 5
+[[menu.main]]
+    name = "RMarkdown"
+    url = "https://rmarkdown.rstudio.com/"
+    weight = 6    
+
+[params]
+    description = "A website built through Hugo and blogdown."
+    footer = "&copy; [Maria](https://marusse.com) 2020  | [Github](https://github.com/maria-pro) | [Twitter](https://twitter.com/m45hap)"
