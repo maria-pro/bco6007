@@ -1,0 +1,115 @@
+---
+title: "BCO6007: Lecture 4"
+subtitle: "Data wrangling 2"
+author: "Dr Maria Prokofieva"
+institute: "VU Business School"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = TRUE,   
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.height = 4,
+                      fig.width = 8,
+                      fig.align = "center")
+library(tidyverse)
+```
+#Key points
+
+- `tidyverse` package
+
+- tidy data procedures
+
+.pull-left[
+##Basic functions to review
+
+- `group_by()`
+- `slice()`
+- `count()`
+- `add_count()`
+- `summarize`
+- `filter()`
+- `select()`
+- `pivot_wide` vs `pivot_long`
+- `fct_reorder()`
+- `fct_lump()`
+- `separate()`
+= `extract()`
+
+]
+.pull-right[
+If you want to get quick info on any function you type in the console
+`?NameOfFunction`
+e.g 
+```{r}
+?slice
+```
+]
+---
+#Workflow for the lecture
+
+1. Open your `RStudio.cloud` `BCO6007` project
+
+2. Create a new lecture R script document - e.g. lecture4.R
+
+3. Practice all lecture examples there
+
+4. If your datasets from lecture 3 are not there, load them using 
+
+```{r}
+grad<-read_csv("graduate-programs.csv")
+head(grad(3))
+
+avocado<-read_csv("avocado.csv")
+head(avocado(3))
+```
+---
+#`slice()`
+
+`slice(data, rows = NULL, each = FALSE)`
+
+`slice_min()`
+
+`slice_max()`
+
+**Arguments**
+
+data: use %>% to "shuffle" it
+
+rows: Rows to select 
+
+each: Apply slice to each group (optional!)
+
+```{r}
+grad  %>% slice(n())
+
+grad %>% 
+  group_by(subject) %>%
+  slice(n())
+```
+
+
+---
+#`slice_min()` and `slice_max()`
+
+```{r}
+grad  %>% slice_min(TotFac, n=5)
+
+grad  %>% slice_max(NumStud, n=4)
+```
+
+
+
+
+---
+

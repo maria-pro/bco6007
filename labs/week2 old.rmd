@@ -1,0 +1,173 @@
+---
+title: "BCO6007 Lab3"
+author: "MariaProkofieva"
+date: "28/03/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE,messages=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+packages <- c(
+  'ggplot2',
+  'ggrepel',
+  'patchwork',
+  'ggraph',
+  'dplyr',
+  'gganimate',
+  'gifski',
+  'ggforce',
+  'ggthemes',
+  'maps',
+  'sf',
+  'tidyr',
+  'concaveman',
+  'remotes'
+)
+# Uncomment the next lines (remove the first #) to install the packages
+# install.packages(packages)
+# remotes::install_github("hrbrmstr/hrbrthemes")
+# Load standard packages
+library(ggplot2)
+library(tidyverse)
+```
+
+
+# Visualization - ggplot2
+
+## Objectives
+
+1. understand different components of ggplot2
+2. use ggplot2 grammar to generate visualizations based on given data
+3. uncover insights based on visualizations
+
+### Dependencies
+List of required packages:
+
+
+### Datasets
+Datasets for all labs are located at VU Collaborate
+
+
+## Exercises
+
+**Game of Thrones—U.S. Viewers per Episode**
+
+We are going to explore the last episode of Game of Thrones, Season 7
+
+- How many viewers saw the episode? 
+- Has this season had the greatest number of viewers so far? 
+- Is the number of viewers from season to season on the rise? 
+
+We have a file with the number of viewers per each episode of each season. This’ll serve as an excellent example for practicing with ggplot2. Let’s make some plots!
+
+
+In the next section, we’ll work through an example that illustrates some basic graph components and how they can be created with ggplot2 syntax:
+
+- data
+- aesthetics
+- geometrical shapes
+- scales, axes and legends
+- themes
+
+
+**Data**
+
+In order for us even to attempt visualization, we must first ensure that we have well-prepared data. In our example, we’ve prepared a table (what’s known as a “data frame” in R - *covered later*) with the number of viewers per each episode of the Game of Thrones serial. It 70 total observations, each representing one episode of a season.
+
+For Season 7, the data is stored in `got_data.csv` file at VU Collaborate. You need to download the file and upload it to your `rstudio.cloud`
+
+```{r}
+#load the data from the .csv file
+GOT<-read.csv("got_data.csv")
+
+head(GOT)
+```
+### Aesthetics Mappings
+Which data are to be presented, and how will we present them on the graph? What will we put on our axes, and how will the data be grouped? The answers to these questions will define our second component. We must define the variables to be represented along our horizontal and vertical axes and additional variables (if necessary) for color, shape, size, and group.
+
+In our example, we will measure Episode along our horizontal axis and `Number_of_viewers` on the vertical. Because we want to distinguish episodes by season, we’ll group and color our data according to a third variable named Season.
+
+Aesthetics are defined through the `aes()` function. This is the code for our example:
+
+```{r}
+plot <- ggplot(GOT, aes(x=Episode,y=Number_of_viewers,colour=Season,group=Season))
+plot
+```
+
+Using this syntax, we have defined our first and second components. However, executing the R code above gives us an empty canvas— there is no visualized data on the graph.
+
+Empty plot—geometric shapes are not defined.
+
+Why is the graph empty? Because we have not yet defined which geometric shapes will represent the data. We must specify what kind of plot we want to create.
+
+### Geometric Shapes
+
+Our next step is to define the geometric shapes that will be used to represent our data. For example, with `geom_point()`, we will make a scatter plot; with `geom_line()`, we will create a line graph; and with `geom_bar()`, we will present a bar chart. (There are many different geometrical shapes, and I’m just mentioning the ones I use the most.)
+
+Let’s go back to our example. Because a line graph is useful for displaying data that change continuously over time, we’ll use that type of graph to show changes in the number of viewers from season to season.
+
+Let’s use `geom_line()` to make a line graph in our example:
+
+```{r, warning=FALSE}
+plot <- plot + geom_line()
+plot
+```
+
+Wouldn’t it be nice to add `points` to the graph? This would make the information easier to read, since the points would emphasize the specific number of viewers for each episode. We can do this with ease, since ggplot2 allows you to use different shapes on a single plot.
+
+Let’s add points with `geom_point()`:
+
+```{r, warning=FALSE}
+plot <- plot + geom_point()
+plot
+```
+
+Having defined the base components of our graph, let’s now turn to the task of making the graph more readable.
+
+### Scales, Axes and Legends
+If we take a look at the graph above without reading the article, it is not clear what the graph is about. It is very important that the visualization is simple, readable, and communicates a clear message. Adding a title, changing or removing the title of the legend, and properly setting axes values and labels will make our plot much more readable. With these components, we are specifying how our aesthetics (`x` and `y axes`, etc.) should be presented on the graph.
+
+Let’s make some changes:
+
+```{r, warning=FALSE}
+plot <- plot +
+ggtitle("Game of Thrones Viewership per episode by Season") +
+scale_x_discrete("Episode number",labels=c("1","2","3","4","5", "6","7","8","9","10")) +
+scale_y_continuous("Number of U.S viewers in millions",breaks=seq(0,12,1))+
+scale_colour_discrete(name="")
+plot
+```
+
+We accomplished the following:
+
+- `Scale_x_discrete()` was used to change the x-axis title (“Episode number” instead of “Episode”) and its labels (“1,2…,10” instead of “Ep1,…,Ep10”). Because the variable Episode is discrete (it has finite set of values) here we are using `scale_x_discrete()` and not `scale_x_continuous()`.
+
+- Because the variable on y axis is continuous, the title and values presented on that axis are changed with component `scale_y_continuous()`. The title is changed from “Number_of_viewers” to “Number of U.S. viewers in millions”, and values on the y axis are now the whole numbers “2,…,12” (in increments of one).
+
+- The legend title is removed with `scale_colour_discrete()`. We used here scale_colour_discrete because our legend is related to discrete Season coloring and grouping which we defined in our aes() statement.
+
+- Title name was added with `ggtitle()`
+
+### Themes
+
+Wouldn’t you like to change the background color? Or emphasize the title? This is possible with themes. Themes are used to control details such as fonts, tick marks, panel strips, and the backgrounds of the entire canvas. Let’s bold our title and change the background color of our plot.
+
+The code is as follows:
+
+```{r, warning=FALSE}
+
+plot <- plot + theme(plot.title = element_text(face="bold"),
+panel.background = element_rect(fill = "white",colour = "grey"),
+panel.grid.major = element_line(colour = "grey",size=0.1),
+panel.grid.minor = element_line(colour = "grey",size=0.1))
+plot
+```
+
+Here’s what we did:
+
+- With the `plot.title = element_text(face=”bold”)` argument, we made our title bold.
+
+- The background of our panel was changed to white, and the border was set to grayy. This was accomplished with the `panel.background` parameter, and additional borders were set with `panel.grid.major/minor`.
+
+We’ve completed our visualization!  Now we can easily draw some conclusions related to the viewership of Game of Thrones. For example, we can clearly see from the graph that Season 7 had the most viewers. With each new season, viewership grows, and the last episode of Season 7 had more than 12 million viewers! Isn’t it great to read so much information from just one picture?
+
