@@ -29,27 +29,16 @@ class: center, middle, inverse, title-slide
 .pull-left[
 ##Basic functions to review
 
+- `group_by()`
 - `slice()`
-
 - `count()`
-
 - `add_count()`
-
 - `summarize`
-
 - `filter()`
-
 - `select()`
-
-- `pivot_wide` vs `pivot_long`
-
+- `pivot_wider` vs `pivot_longer`
 - `fct_reorder()`
-
 - `fct_lump()`
-
-- `separate()`
-
-= `extract()`
 ]
 .pull-right[
 If you want to get quick info on any function you type in the console
@@ -71,22 +60,22 @@ e.g
 
 4. If your datasets from lecture 3 are not there, load them using 
 
+I highly encourage you to have a look at [this great talk](https://www.youtube.com/watch?v=NDHSBUN_rVU) by [David Robinson](https://twitter.com/drob)
+
+Also, have a look at this one! [Teach `tidyverse` for beginners](https://www.youtube.com/watch?v=dT5A0sAWc2I) 
+
 
 ```r
 grad&lt;-read_csv("graduate-programs.csv")
-head(grad)
+head(grad, n=2)
 ```
 
 ```
-## # A tibble: 6 x 16
+## # A tibble: 2 x 16
 ##   subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
 ##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
 ## 1 econom… ARIZ…      0.9       1.57         31.3          31.7             5.6 
 ## 2 econom… AUBU…      0.79      0.64         77.6          44.4             3.84
-## 3 econom… BOST…      0.51      1.03         43.5          46.8             5   
-## 4 econom… BOST…      0.49      2.66         36.9          34.2             5.5 
-## 5 econom… BRAN…      0.3       3.03         36.8          48.7             5.29
-## 6 econom… BROW…      0.84      2.31         27.1          54.6             6   
 ## # … with 9 more variables: PctMinorityFac &lt;dbl&gt;, PctFemaleFac &lt;dbl&gt;,
 ## #   PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;, AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;,
 ## #   TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;, NumStud &lt;dbl&gt;
@@ -94,78 +83,470 @@ head(grad)
 
 ```r
 avocado&lt;-read_csv("avocado.csv")
-head(avocado)
+head(avocado, n=2)
 ```
 
 ```
-## # A tibble: 6 x 14
+## # A tibble: 2 x 14
 ##      X1 Date       AveragePrice `Total Volume` `4046` `4225` `4770` `Total Bags`
 ##   &lt;dbl&gt; &lt;date&gt;            &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt;
-## 1     0 2015-12-27         1.33         64237.  1037. 5.45e4   48.2        8697.
-## 2     1 2015-12-20         1.35         54877.   674. 4.46e4   58.3        9506.
-## 3     2 2015-12-13         0.93        118220.   795. 1.09e5  130.         8145.
-## 4     3 2015-12-06         1.08         78992.  1132  7.20e4   72.6        5811.
-## 5     4 2015-11-29         1.28         51040.   941. 4.38e4   75.8        6184.
-## 6     5 2015-11-22         1.26         55980.  1184. 4.81e4   43.6        6684.
+## 1     0 2015-12-27         1.33         64237.  1037. 54455.   48.2        8697.
+## 2     1 2015-12-20         1.35         54877.   674. 44639.   58.3        9506.
 ## # … with 6 more variables: `Small Bags` &lt;dbl&gt;, `Large Bags` &lt;dbl&gt;, `XLarge
 ## #   Bags` &lt;dbl&gt;, type &lt;chr&gt;, year &lt;dbl&gt;, region &lt;chr&gt;
 ```
 ---
-#`slice()`
+#`group_by()` and combinations
+[Doc](https://www.rdocumentation.org/packages/ggvis/versions/0.4.5/topics/group_by) - divide data into groups
 
-`slice(data, rows = NULL, each = FALSE)`
+When you group, all operations are done **within** a group, e.g. average within the dataset vs average per group
 
-`slice_min()`
-
-`slice_max()`
-
-**Arguments**
-
-data: use %&gt;% to "shuffle" it
-
-rows: Rows to select 
-
-each: Apply slice to each group (optional!)
-
+To ungroup = `ungroup()`
+See examples further in the lecture
 
 ```r
-grad  %&gt;% slice(n())
+#new grouped dataset
+group_grad&lt;-grad %&gt;% 
+  group_by(subject)
+
+group_avocado &lt;- avocado %&gt;% 
+  group_by(region)
+```
+---
+#`slice()` and Co.
+[Doc](https://dplyr.tidyverse.org/reference/slice.html) - select particular parts of data
+
+`slice_head()` and `slice_tail() `select the first or last rows.
+
+If .data is a groupped (=`group_by()`), the operation will be performed on each group, so that e.g. 
+`data %&gt;%slice_head(n = 5)` will select the first five rows in each group.
+
+```r
+grad %&gt;% slice_head(n=2)
 ```
 
 ```
-## # A tibble: 1 x 16
+## # A tibble: 2 x 16
 ##   subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
 ##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
-## 1 psycho… YALE…      1.97      3.81         66.6          71.7              4.5
+## 1 econom… ARIZ…      0.9       1.57         31.3          31.7             5.6 
+## 2 econom… AUBU…      0.79      0.64         77.6          44.4             3.84
 ## # … with 9 more variables: PctMinorityFac &lt;dbl&gt;, PctFemaleFac &lt;dbl&gt;,
 ## #   PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;, AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;,
 ## #   TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;, NumStud &lt;dbl&gt;
 ```
 
 ```r
-grad %&gt;% 
-  group_by(subject) %&gt;%
-  slice(n())
+avocado %&gt;% slice_tail(n=2)
 ```
 
 ```
-## # A tibble: 4 x 16
+## # A tibble: 2 x 14
+##      X1 Date       AveragePrice `Total Volume` `4046` `4225` `4770` `Total Bags`
+##   &lt;dbl&gt; &lt;date&gt;            &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt;
+## 1    10 2018-01-14         1.93         16205.  1528.  2981.   727.       10970.
+## 2    11 2018-01-07         1.62         17490.  2895.  2356.   225.       12014.
+## # … with 6 more variables: `Small Bags` &lt;dbl&gt;, `Large Bags` &lt;dbl&gt;, `XLarge
+## #   Bags` &lt;dbl&gt;, type &lt;chr&gt;, year &lt;dbl&gt;, region &lt;chr&gt;
+```
+---
+
+`slice()` with `group_by()`
+
+```r
+grad %&gt;%
+  group_by(subject)%&gt;%
+  slice_head(n=2)
+```
+
+```
+## # A tibble: 8 x 16
 ## # Groups:   subject [4]
 ##   subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
 ##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
-## 1 astron… YALE…      4.12      3.98         81.2          10               5.7 
-## 2 econom… YALE…      0.61      1.68         53.7          56               5.2 
-## 3 entomo… WASH…      1.3       1.12         88.1          30               4.75
-## 4 psycho… YALE…      1.97      3.81         66.6          71.7             4.5 
+## 1 astron… CALI…      6.57      6.44        100            39.3             6   
+## 2 astron… COLU…      4.48      4.47        100            58.7             6   
+## 3 econom… ARIZ…      0.9       1.57         31.3          31.7             5.6 
+## 4 econom… AUBU…      0.79      0.64         77.6          44.4             3.84
+## 5 entomo… CLEM…      1.04      0.59         89.9          63.3             5.5 
+## 6 entomo… CORN…      1.77      1.37         90.2          37.2             6.4 
+## 7 psycho… AMER…      0.63      0.94         25            47.4             6.7 
+## 8 psycho… ARIZ…      1.55      2.91         80.5          26.1             7   
 ## # … with 9 more variables: PctMinorityFac &lt;dbl&gt;, PctFemaleFac &lt;dbl&gt;,
 ## #   PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;, AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;,
 ## #   TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;, NumStud &lt;dbl&gt;
 ```
+---
 
+```r
+avocado%&gt;%
+  group_by(region)%&gt;%
+  slice_tail(n=5)
+```
+
+```
+## # A tibble: 270 x 14
+## # Groups:   region [54]
+##       X1 Date       AveragePrice `Total Volume` `4046` `4225` `4770`
+##    &lt;dbl&gt; &lt;date&gt;            &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1     7 2018-02-04         1.52          4125.  118.    420.      0
+##  2     8 2018-01-28         1.32          6988.  434.    375.      0
+##  3     9 2018-01-21         1.54          3347.   14.7   253.      0
+##  4    10 2018-01-14         1.47          4141.    7.3   302.      0
+##  5    11 2018-01-07         1.54          4817.   43.5   412.      0
+##  6     7 2018-02-04         1.62         11900.  384.   4043.      0
+##  7     8 2018-01-28         1.67         14446.  390.   5130.      0
+##  8     9 2018-01-21         1.64         18555.  349.   3968.      0
+##  9    10 2018-01-14         1.56         16152.  292.   3583.      0
+## 10    11 2018-01-07         1.53         15714.  405.   4195.      0
+## # … with 260 more rows, and 7 more variables: `Total Bags` &lt;dbl&gt;, `Small
+## #   Bags` &lt;dbl&gt;, `Large Bags` &lt;dbl&gt;, `XLarge Bags` &lt;dbl&gt;, type &lt;chr&gt;,
+## #   year &lt;dbl&gt;, region &lt;chr&gt;
+```
 
 ---
 #`slice_min()` and `slice_max()`
 
+- use `order_by` to select the variable according to which the selection should be done
+- can be used with `group_by()`
+
+
+```r
+grad  %&gt;% 
+  slice_min(order_by=NumStud, n=3)
+```
+
+```
+## # A tibble: 5 x 16
+##   subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+## 1 psycho… FLOR…      0.23     0.580          0            50               2.5 
+## 2 entomo… OREG…      0.44     0.93         100            60.7             5.88
+## 3 entomo… UNIV…      1.48     0.41          82.9          64.3             3.9 
+## 4 psycho… UNIV…      1.87     3.47          63.6          34               7.5 
+## 5 psycho… UNIV…      0.07     1.43           0            72.3             5   
+## # … with 9 more variables: PctMinorityFac &lt;dbl&gt;, PctFemaleFac &lt;dbl&gt;,
+## #   PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;, AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;,
+## #   TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;, NumStud &lt;dbl&gt;
+```
+---
+
+```r
+grad %&gt;% 
+  group_by(subject) %&gt;%
+  slice_min(order_by=NumStud, n=2, with_ties = FALSE)
+```
+
+```
+## # A tibble: 8 x 16
+## # Groups:   subject [4]
+##   subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+## 1 astron… UNIV…      5.98     2.01         100            53.3             6   
+## 2 astron… MICH…      4.56     3.89          87.4          36.7             4.3 
+## 3 econom… UNIV…      0.05     0.39          60.9           0               4.83
+## 4 econom… UNIV…      0.6      0.71          60            53               6   
+## 5 entomo… OREG…      0.44     0.93         100            60.7             5.88
+## 6 entomo… UNIV…      1.48     0.41          82.9          64.3             3.9 
+## 7 psycho… FLOR…      0.23     0.580          0            50               2.5 
+## 8 psycho… UNIV…      1.87     3.47          63.6          34               7.5 
+## # … with 9 more variables: PctMinorityFac &lt;dbl&gt;, PctFemaleFac &lt;dbl&gt;,
+## #   PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;, AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;,
+## #   TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;, NumStud &lt;dbl&gt;
+```
+* `with_ties = FALSE` 
+---
+
+```r
+avocado  %&gt;% 
+  slice_max(order_by=AveragePrice, n=5)
+```
+
+```
+## # A tibble: 5 x 14
+##      X1 Date       AveragePrice `Total Volume` `4046` `4225` `4770` `Total Bags`
+##   &lt;dbl&gt; &lt;date&gt;            &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt;
+## 1     8 2016-10-30         3.25         16701.  2326. 1.11e4     0         3232.
+## 2    37 2017-04-16         3.17          3019.  1256. 8.23e1     0         1681.
+## 3     7 2016-11-06         3.12         19044.  5898. 1.00e4     0         3106.
+## 4    42 2017-03-12         3.05          2068.  1044. 7.74e1     0          947.
+## 5    18 2017-08-27         3.04         12656.   419. 4.85e3   145.        7240.
+## # … with 6 more variables: `Small Bags` &lt;dbl&gt;, `Large Bags` &lt;dbl&gt;, `XLarge
+## #   Bags` &lt;dbl&gt;, type &lt;chr&gt;, year &lt;dbl&gt;, region &lt;chr&gt;
+```
+---
+
+```r
+grad %&gt;% 
+  group_by(subject) %&gt;%
+  slice_max(order_by=NumStud, n=2, with_ties = FALSE)
+```
+
+```
+## # A tibble: 8 x 16
+## # Groups:   subject [4]
+##   subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+## 1 astron… UNIV…      3.4       3.24         86.8          70.7             5   
+## 2 astron… UNIV…      3.33      2.84         95            51.3             5.72
+## 3 econom… UNIV…      0.61      3.44         54.8          62.5             5.5 
+## 4 econom… UNIV…      0.79      2.68         71.4          42.6             5.7 
+## 5 entomo… UNIV…      1.49      1            85.4          48               5.33
+## 6 entomo… UNIV…      2.69      1.35         95.9          48.7             5   
+## 7 psycho… UNIV…      1.39      3.3          57.2          28.1             6.17
+## 8 psycho… UNIV…      1.05      1.72         65.6          34.2             6   
+## # … with 9 more variables: PctMinorityFac &lt;dbl&gt;, PctFemaleFac &lt;dbl&gt;,
+## #   PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;, AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;,
+## #   TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;, NumStud &lt;dbl&gt;
+```
+---
+#`count()`
+[Doc](https://dplyr.tidyverse.org/reference/tally.html) - Count/tally observations by group
+
+
+```r
+grad%&gt;% 
+  count(subject)%&gt;% 
+  slice_head(n=3)
+```
+
+```
+## # A tibble: 3 x 2
+##   subject        n
+##   &lt;chr&gt;      &lt;int&gt;
+## 1 astronomy     32
+## 2 economics    117
+## 3 entomology    27
+```
+
+```r
+grad%&gt;% 
+  count(subject, Inst)%&gt;% 
+  slice_head(n=3)
+```
+
+```
+## # A tibble: 3 x 3
+##   subject   Inst                                            n
+##   &lt;chr&gt;     &lt;chr&gt;                                       &lt;int&gt;
+## 1 astronomy CALIFORNIA INSTITUTE OF TECHNOLOGY              1
+## 2 astronomy COLUMBIA UNIVERSITY IN THE CITY OF NEW YORK     1
+## 3 astronomy CORNELL UNIVERSITY                              1
+```
+---
+#`add_count()`
+[Doc](https://dplyr.tidyverse.org/reference/tally.html) - adds a column n to a table based on the number of items within each existing group
+
+
+```r
+avocado_counted&lt;-avocado %&gt;% 
+  add_count(region) %&gt;% 
+  select(X1, region, n) 
+
+avocado_counted %&gt;% slice_head(n=5)
+```
+
+```
+## # A tibble: 5 x 3
+##      X1 region     n
+##   &lt;dbl&gt; &lt;chr&gt;  &lt;int&gt;
+## 1     0 Albany   338
+## 2     1 Albany   338
+## 3     2 Albany   338
+## 4     3 Albany   338
+## 5     4 Albany   338
+```
+---
+
+- `mutate()`
+
+[Doc](https://dplyr.tidyverse.org/reference/mutate.html) - Create, modify, and delete columns
+
+
+```r
+grad  %&gt;% 
+  mutate(Student2Staff=NumStud/TotFac)%&gt;% 
+  slice_head(n=5)
+```
+
+```
+## # A tibble: 5 x 17
+##   subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+## 1 econom… ARIZ…      0.9       1.57         31.3          31.7             5.6 
+## 2 econom… AUBU…      0.79      0.64         77.6          44.4             3.84
+## 3 econom… BOST…      0.51      1.03         43.5          46.8             5   
+## 4 econom… BOST…      0.49      2.66         36.9          34.2             5.5 
+## 5 econom… BRAN…      0.3       3.03         36.8          48.7             5.29
+## # … with 10 more variables: PctMinorityFac &lt;dbl&gt;, PctFemaleFac &lt;dbl&gt;,
+## #   PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;, AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;,
+## #   TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;, NumStud &lt;dbl&gt;, Student2Staff &lt;dbl&gt;
+```
+`add_count()` is equivalents to count() with `mutate()` to add a new column with group-wise counts.
+
+**Task**
+Search what `transmute()` function is doing and how different it is from `mutate()`.
+Run the same example with `transmute()`.
+---
+
+- `summarize()`
+[Doc](https://dplyr.tidyverse.org/reference/summarise.html) - Summarise each group to fewer rows
+
+
+```r
+grad  %&gt;% summarize(mean = mean(NumStud), n = n())
+```
+
+```
+## # A tibble: 1 x 2
+##    mean     n
+##   &lt;dbl&gt; &lt;int&gt;
+## 1  54.5   412
+```
+
+```r
+grad  %&gt;% 
+  group_by(subject)%&gt;% 
+  summarize(mean = mean(NumStud), n = n())
+```
+
+```
+## # A tibble: 4 x 3
+##   subject     mean     n
+##   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;
+## 1 astronomy   30.0    32
+## 2 economics   60.7   117
+## 3 entomology  20.1    27
+## 4 psychology  58.7   236
+```
+
+**Task**
+calculate 
+- the average price of avocado in the dataset 
+- average price per region
+- average price per region per year
+
+**HINT** `summarize` is not ALWAYS neccessary, `count()` can be a good alternative:
+
+`df %&gt;% count(a, b)` is roughly equivalent to `df %&gt;% group_by(a, b) %&gt;% summarise(n = n())`
+---
+
+- `filter()`
+[Doc](https://dplyr.tidyverse.org/reference/filter.html) - select rows 
+
+
+```r
+grad  %&gt;% filter(NumStud&gt;100)
+```
+
+```
+## # A tibble: 56 x 16
+##    subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
+##    &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+##  1 econom… BOST…      0.49      2.66         36.9          34.2             5.5 
+##  2 econom… COLU…      0.62      1.52         60.2          43.4             6   
+##  3 econom… CORN…      0.71      1.61         59.7          67.9             5.4 
+##  4 econom… HARV…      1.17      4.26         68.9          79.7             5   
+##  5 econom… MASS…      1.23      3.17         55.7          81.8             4.8 
+##  6 econom… NEW …      0.76      2.35         71.3          56.4             5.67
+##  7 econom… NORT…      0.53      2.43         48.6          54.6             5.1 
+##  8 econom… OHIO…      0.51      1.09         42            32.3             5.75
+##  9 econom… STAN…      0.52      2.73         45.3          58.7             6   
+## 10 econom… TEXA…      0.46      0.73         43.9          44.1             5   
+## # … with 46 more rows, and 9 more variables: PctMinorityFac &lt;dbl&gt;,
+## #   PctFemaleFac &lt;dbl&gt;, PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;,
+## #   AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;, TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;,
+## #   NumStud &lt;dbl&gt;
+```
+
+```r
+grad  %&gt;%
+  group_by(Inst)%&gt;% 
+  filter(NumStud&gt;mean(NumStud))
+```
+
+```
+## # A tibble: 170 x 16
+## # Groups:   Inst [127]
+##    subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
+##    &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+##  1 econom… BOST…      0.51      1.03         43.5          46.8             5   
+##  2 econom… BOST…      0.49      2.66         36.9          34.2             5.5 
+##  3 econom… BRAN…      0.3       3.03         36.8          48.7             5.29
+##  4 econom… BROW…      0.84      2.31         27.1          54.6             6   
+##  5 econom… CALI…      0.99      2.31         56.4          83.3             4   
+##  6 econom… CARN…      0.43      1.67         35.2          45.6             5.05
+##  7 econom… CITY…      0.35      1.06         38.1          27.9             5.2 
+##  8 econom… COLU…      0.62      1.52         60.2          43.4             6   
+##  9 econom… CORN…      0.71      1.61         59.7          67.9             5.4 
+## 10 econom… FORD…      0.27      0.23         16.7          30.1             5.5 
+## # … with 160 more rows, and 9 more variables: PctMinorityFac &lt;dbl&gt;,
+## #   PctFemaleFac &lt;dbl&gt;, PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;,
+## #   AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;, TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;,
+## #   NumStud &lt;dbl&gt;
+```
+---
+
+- `select()`
+[Doc](https://dplyr.tidyverse.org/reference/select.html) - select columns
+
+
+```r
+grad  %&gt;% select(Inst)
+```
+
+```
+## # A tibble: 412 x 1
+##    Inst                                    
+##    &lt;chr&gt;                                   
+##  1 ARIZONA STATE UNIVERSITY                
+##  2 AUBURN UNIVERSITY                       
+##  3 BOSTON COLLEGE                          
+##  4 BOSTON UNIVERSITY                       
+##  5 BRANDEIS UNIVERSITY                     
+##  6 BROWN UNIVERSITY                        
+##  7 CALIFORNIA INSTITUTE OF TECHNOLOGY      
+##  8 CARNEGIE MELLON UNIVERSITY              
+##  9 CITY UNIVERSITY OF NEW YORK GRAD. CENTER
+## 10 CLAREMONT GRADUATE UNIVERSITY           
+## # … with 402 more rows
+```
+
+```r
+grad  %&gt;% select(subject, Inst, NumStud)
+```
+
+```
+## # A tibble: 412 x 3
+##    subject   Inst                                     NumStud
+##    &lt;chr&gt;     &lt;chr&gt;                                      &lt;dbl&gt;
+##  1 economics ARIZONA STATE UNIVERSITY                      33
+##  2 economics AUBURN UNIVERSITY                             21
+##  3 economics BOSTON COLLEGE                                64
+##  4 economics BOSTON UNIVERSITY                            148
+##  5 economics BRANDEIS UNIVERSITY                           24
+##  6 economics BROWN UNIVERSITY                              81
+##  7 economics CALIFORNIA INSTITUTE OF TECHNOLOGY            32
+##  8 economics CARNEGIE MELLON UNIVERSITY                    35
+##  9 economics CITY UNIVERSITY OF NEW YORK GRAD. CENTER      96
+## 10 economics CLAREMONT GRADUATE UNIVERSITY                 76
+## # … with 402 more rows
+```
+**Task**
+- from the avocado dataset select variables: year, region and AveragePrice
+
+---
+- `pivot_wider` vs `pivot_longer`
+
+[Doc](https://tidyr.tidyverse.org/reference/pivot_wider.html) - "widens" data, increasing the number of columns and decreasing the number of rows. The inverse is `pivot_longer()`.
+
+Use [this link](https://tidyr.tidyverse.org/articles/pivot.html) for lots of examples!
+
+![ ](tidy.gif)
+---
+
+= `extract()`
+[Doc](https://dplyr.tidyverse.org/reference/slice.html) - select particular parts of data
 
 ```r
 grad  %&gt;% slice_min(TotFac, n=5)
@@ -201,10 +582,21 @@ grad  %&gt;% slice_max(NumStud, n=4)
 ## #   PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;, AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;,
 ## #   TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;, NumStud &lt;dbl&gt;
 ```
+---
 
 
+- `fct_reorder()`
+[Doc](https://forcats.tidyverse.org/reference/fct_reorder.html) - Reorder factor levels by sorting along another variable
+
+- `fct_lump()`
+[Doc](https://forcats.tidyverse.org/reference/fct_lump.html) - Lump together factor levels into "other"
 
 
+```r
+ grad_lump&lt;-fct_lump(grad$subject, 3) 
+```
+---
+Let's practice!
 ---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

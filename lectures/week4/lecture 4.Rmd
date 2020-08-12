@@ -40,12 +40,9 @@ library(tidyverse)
 - `summarize`
 - `filter()`
 - `select()`
-- `pivot_wide` vs `pivot_long`
+- `pivot_wider` vs `pivot_longer`
 - `fct_reorder()`
 - `fct_lump()`
-- `separate()`
-= `extract()`
-
 ]
 .pull-right[
 If you want to get quick info on any function you type in the console
@@ -66,50 +63,207 @@ e.g
 
 4. If your datasets from lecture 3 are not there, load them using 
 
+I highly encourage you to have a look at [this great talk](https://www.youtube.com/watch?v=NDHSBUN_rVU) by [David Robinson](https://twitter.com/drob)
+
+Also, have a look at this one! [Teach `tidyverse` for beginners](https://www.youtube.com/watch?v=dT5A0sAWc2I) 
+
 ```{r}
 grad<-read_csv("graduate-programs.csv")
-head(grad(3))
+head(grad, n=2)
 
 avocado<-read_csv("avocado.csv")
-head(avocado(3))
+head(avocado, n=2)
 ```
 ---
-#`slice()`
+#`group_by()` and combinations
+[Doc](https://www.rdocumentation.org/packages/ggvis/versions/0.4.5/topics/group_by) - divide data into groups
 
-`slice(data, rows = NULL, each = FALSE)`
+When you group, all operations are done **within** a group, e.g. average within the dataset vs average per group
 
-`slice_min()`
-
-`slice_max()`
-
-**Arguments**
-
-data: use %>% to "shuffle" it
-
-rows: Rows to select 
-
-each: Apply slice to each group (optional!)
-
+To ungroup = `ungroup()`
+See examples further in the lecture
 ```{r}
-grad  %>% slice(n())
+#new grouped dataset
+group_grad<-grad %>% 
+  group_by(subject)
 
-grad %>% 
-  group_by(subject) %>%
-  slice(n())
+group_avocado <- avocado %>% 
+  group_by(region)
 ```
+---
+#`slice()` and Co.
+[Doc](https://dplyr.tidyverse.org/reference/slice.html) - select particular parts of data
 
+`slice_head()` and `slice_tail() `select the first or last rows.
+
+If .data is a groupped (=`group_by()`), the operation will be performed on each group, so that e.g. 
+`data %>%slice_head(n = 5)` will select the first five rows in each group.
+```{r}
+grad %>% slice_head(n=2)
+
+avocado %>% slice_tail(n=2)
+```
+---
+
+`slice()` with `group_by()`
+```{r}
+grad %>%
+  group_by(subject)%>%
+  slice_head(n=2)
+```
+---
+```{r}
+avocado%>%
+  group_by(region)%>%
+  slice_tail(n=5)
+```
 
 ---
 #`slice_min()` and `slice_max()`
 
+- use `order_by` to select the variable according to which the selection should be done
+- can be used with `group_by()`
+
+```{r}
+grad  %>% 
+  slice_min(order_by=NumStud, n=3)
+```
+---
+```{r}
+grad %>% 
+  group_by(subject) %>%
+  slice_min(order_by=NumStud, n=2, with_ties = FALSE)
+```
+* `with_ties = FALSE` 
+---
+```{r}
+avocado  %>% 
+  slice_max(order_by=AveragePrice, n=5)
+```
+---
+```{r}
+grad %>% 
+  group_by(subject) %>%
+  slice_max(order_by=NumStud, n=2, with_ties = FALSE)
+```
+---
+#`count()`
+[Doc](https://dplyr.tidyverse.org/reference/tally.html) - Count/tally observations by group
+
+```{r}
+grad%>% 
+  count(subject)%>% 
+  slice_head(n=3)
+
+
+grad%>% 
+  count(subject, Inst)%>% 
+  slice_head(n=3)
+```
+---
+#`add_count()`
+[Doc](https://dplyr.tidyverse.org/reference/tally.html) - adds a column n to a table based on the number of items within each existing group
+
+```{r}
+avocado_counted<-avocado %>% 
+  add_count(region) %>% 
+  select(X1, region, n) 
+
+avocado_counted %>% slice_head(n=5)
+```
+---
+
+- `mutate()`
+
+[Doc](https://dplyr.tidyverse.org/reference/mutate.html) - Create, modify, and delete columns
+
+```{r}
+grad  %>% 
+  mutate(Student2Staff=NumStud/TotFac)%>% 
+  slice_head(n=5)
+```
+`add_count()` is equivalents to count() with `mutate()` to add a new column with group-wise counts.
+
+**Task**
+Search what `transmute()` function is doing and how different it is from `mutate()`.
+Run the same example with `transmute()`.
+---
+
+- `summarize()`
+[Doc](https://dplyr.tidyverse.org/reference/summarise.html) - Summarise each group to fewer rows
+
+```{r}
+grad  %>% summarize(mean = mean(NumStud), n = n())
+
+grad  %>% 
+  group_by(subject)%>% 
+  summarize(mean = mean(NumStud), n = n())
+```
+
+**Task**
+calculate 
+- the average price of avocado in the dataset 
+- average price per region
+- average price per region per year
+
+**HINT** `summarize` is not ALWAYS neccessary, `count()` can be a good alternative:
+
+`df %>% count(a, b)` is roughly equivalent to `df %>% group_by(a, b) %>% summarise(n = n())`
+---
+
+- `filter()`
+[Doc](https://dplyr.tidyverse.org/reference/filter.html) - select rows 
+
+```{r}
+grad  %>% filter(NumStud>100)
+
+grad  %>%
+  group_by(Inst)%>% 
+  filter(NumStud>mean(NumStud))
+```
+---
+
+- `select()`
+[Doc](https://dplyr.tidyverse.org/reference/select.html) - select columns
+
+```{r}
+grad  %>% select(Inst)
+
+grad  %>% select(subject, Inst, NumStud)
+```
+**Task**
+- from the avocado dataset select variables: year, region and AveragePrice
+
+---
+- `pivot_wider` vs `pivot_longer`
+
+[Doc](https://tidyr.tidyverse.org/reference/pivot_wider.html) - "widens" data, increasing the number of columns and decreasing the number of rows. The inverse is `pivot_longer()`.
+
+Use [this link](https://tidyr.tidyverse.org/articles/pivot.html) for lots of examples!
+
+![ ](tidy.gif)
+---
+
+= `extract()`
+[Doc](https://dplyr.tidyverse.org/reference/slice.html) - select particular parts of data
 ```{r}
 grad  %>% slice_min(TotFac, n=5)
 
 grad  %>% slice_max(NumStud, n=4)
 ```
+---
 
 
+- `fct_reorder()`
+[Doc](https://forcats.tidyverse.org/reference/fct_reorder.html) - Reorder factor levels by sorting along another variable
 
+- `fct_lump()`
+[Doc](https://forcats.tidyverse.org/reference/fct_lump.html) - Lump together factor levels into "other"
 
+```{r}
+ grad_lump<-fct_lump(grad$subject, 3) 
+```
+---
+Let's practice!
 ---
 
