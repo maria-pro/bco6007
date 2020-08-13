@@ -1,0 +1,61 @@
+---
+title: "BCO6007: Lecture 5"
+subtitle: "Dealing with different datatypes"
+author: "Dr Maria Prokofieva"
+institute: "VU Business School"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = TRUE,   
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.height = 4,
+                      fig.width = 8,
+                      fig.align = "center")
+library(tidyverse)
+```
+#Key points
+
+- `tidyverse` package
+- data types
+- data viz for different data types
+
+.pull-left[
+##Basic functions to review
+
+- tibbles
+- factors
+- date/times
+- time series basi
+]
+.pull-right[
+If you want to get quick info on any function you type in the console
+`?NameOfFunction`
+e.g 
+```{r}
+?slice
+```
+]
+---
+#Workflow for the lecture
+
+1. Open your `RStudio.cloud` `BCO6007` project
+
+2. Create a new lecture R script document - e.g. lecture5.R
+
+3. Practice all lecture examples there
+
+4. If your datasets from lecture 3 (lecture 4) are not there, load them using 
+
+
+
