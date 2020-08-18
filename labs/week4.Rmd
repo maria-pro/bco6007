@@ -1,5 +1,5 @@
 ---
-title: "BCO6007: Lab 4"
+title: "BCO6007: Week 4 Tutorial"
 author: "MariaProkofieva"
 date: "08/04/2020"
 output: html_document
@@ -8,16 +8,12 @@ output: html_document
 ```{r setup, include=FALSE,messages=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-# Uncomment the next lines (remove the first #) to install the packages
-# install.packages(packages)
-# remotes::install_github("hrbrmstr/hrbrthemes")
-# Load standard packages
 library(tidyverse)
 theme_set(theme_light())
 
 ```
 
-# Lab4: Data Preparation and transformation
+# Week 4: Data Preparation and transformation
 
 ## Objectives
 
@@ -91,15 +87,6 @@ pizza_short%>%
   ungroup()
 
 
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
 ```
 
 Let's get the top 50 reviews

@@ -23,6 +23,7 @@ class: center, middle, inverse, title-slide
 #Key points
 
 - `tidyverse` package
+- `maps` package
 - data types
 - data viz for different data types
 
@@ -32,7 +33,7 @@ class: center, middle, inverse, title-slide
 - tibbles
 - factors
 - date/times
-- time series basi
+- maps
 ]
 .pull-right[
 If you want to get quick info on any function you type in the console
@@ -52,7 +53,647 @@ e.g
 
 3. Practice all lecture examples there
 
-4. If your datasets from lecture 3 (lecture 4) are not there, load them using
+4. If your datasets from lecture 3 (lecture 4) are not there, load them using 
+
+---
+
+# Tibbles and tidy data
+
+`Tibbles` are data frames that satisfy the tidy data approach!
+You can access individual variables in your tibble by using their position:
+
+# Extract by name or by number!
+
+
+```r
+grad&lt;-read_csv("graduate-programs.csv")
+avocado&lt;-read_csv("avocado.csv")
+
+grad$subject
+```
+
+```
+##   [1] "economics"  "economics"  "economics"  "economics"  "economics" 
+##   [6] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [11] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [16] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [21] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [26] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [31] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [36] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [41] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [46] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [51] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [56] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [61] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [66] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [71] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [76] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [81] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [86] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [91] "economics"  "economics"  "economics"  "economics"  "economics" 
+##  [96] "economics"  "economics"  "economics"  "economics"  "economics" 
+## [101] "economics"  "economics"  "economics"  "economics"  "economics" 
+## [106] "economics"  "economics"  "economics"  "economics"  "economics" 
+## [111] "economics"  "economics"  "economics"  "economics"  "economics" 
+## [116] "economics"  "economics"  "entomology" "entomology" "entomology"
+## [121] "entomology" "entomology" "entomology" "entomology" "entomology"
+## [126] "entomology" "entomology" "entomology" "entomology" "entomology"
+## [131] "entomology" "entomology" "entomology" "entomology" "entomology"
+## [136] "entomology" "entomology" "entomology" "entomology" "entomology"
+## [141] "entomology" "entomology" "entomology" "entomology" "astronomy" 
+## [146] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
+## [151] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
+## [156] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
+## [161] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
+## [166] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
+## [171] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
+## [176] "astronomy"  "psychology" "psychology" "psychology" "psychology"
+## [181] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [186] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [191] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [196] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [201] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [206] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [211] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [216] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [221] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [226] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [231] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [236] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [241] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [246] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [251] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [256] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [261] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [266] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [271] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [276] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [281] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [286] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [291] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [296] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [301] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [306] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [311] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [316] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [321] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [326] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [331] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [336] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [341] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [346] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [351] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [356] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [361] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [366] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [371] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [376] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [381] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [386] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [391] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [396] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [401] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [406] "psychology" "psychology" "psychology" "psychology" "psychology"
+## [411] "psychology" "psychology"
+```
+
+```r
+grad[, 1]
+```
+
+```
+## # A tibble: 412 x 1
+##    subject  
+##    &lt;chr&gt;    
+##  1 economics
+##  2 economics
+##  3 economics
+##  4 economics
+##  5 economics
+##  6 economics
+##  7 economics
+##  8 economics
+##  9 economics
+## 10 economics
+## # … with 402 more rows
+```
+
+We can also access individual rows! using their number
+
+```r
+grad[5,]
+```
+
+```
+## # A tibble: 1 x 16
+##   subject Inst  AvNumPubs AvNumCits PctFacGrants PctCompletion MedianTimetoDeg…
+##   &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+## 1 econom… BRAN…       0.3      3.03         36.8          48.7             5.29
+## # … with 9 more variables: PctMinorityFac &lt;dbl&gt;, PctFemaleFac &lt;dbl&gt;,
+## #   PctFemaleStud &lt;dbl&gt;, PctIntlStud &lt;dbl&gt;, AvNumPhDs &lt;dbl&gt;, AvGREs &lt;dbl&gt;,
+## #   TotFac &lt;dbl&gt;, PctAsstProf &lt;dbl&gt;, NumStud &lt;dbl&gt;
+```
+
+```r
+#OR
+
+grad[5,8]
+```
+
+```
+## # A tibble: 1 x 1
+##   PctMinorityFac
+##            &lt;dbl&gt;
+## 1              0
+```
+---
+# Factors
+
+In R, `factors` are used to work with *categorical variables*, variables that have a fixed and known set of possible values. They are also useful when you want to display character vectors in a non-alphabetical order.
+
+Can you give me examples of categorical variables?
+
+Have a look at the `avocado` dataset and tell which variables "should" be categorical ones
+
+---
+# Working with factors
+
+If for some reason, your data is recorded as a character string and you need to convert it to a factor, use `as_factor()` command.
+
+Have a look at the `Help` and tell me how to do this for `region` variable in the `avocado` dataset
+
+Also, let's have a look at our `grad` dataset and identify "possible" factors there
+
+---
+# Modifying factor order
+
+It’s often useful to change the order of the factor levels in a visualisation. 
+
+
+```r
+grad_summary &lt;- grad %&gt;%
+  group_by(Inst) %&gt;%
+  summarise(
+    students = mean(NumStud, na.rm = TRUE),
+    faculty = mean(TotFac, na.rm = TRUE),
+    n = n()
+  )
+
+grad_summary %&gt;%
+  slice_max(students, n=10)%&gt;%
+ggplot(aes(students, Inst)) + 
+  geom_point()
+```
+
+&lt;img src="lecture-5_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+---
+It is difficult to interpret this plot because there’s no overall pattern. We can improve it by reordering the levels of `Inst` using `fct_reorder()`. 
+
+`fct_reorder()` takes three arguments:
+
+- `f`, the factor whose levels you want to modify.
+
+- `x`, a numeric vector that you want to use to reorder the levels.
+
+- Optionally, `fun`, a `function` that’s used `if` there are multiple values of `x` for each value of `f`. 
+---
+
+Let's change it 
+
+```r
+grad_summary %&gt;%
+  slice_max(students, n=10)%&gt;%
+ggplot(aes(students, fct_reorder(Inst, students))) + 
+  geom_point()
+```
+
+&lt;img src="lecture-5_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+---
+Task:
+
+With `avocado` data, 
+
+1. create a summary dataset by `summarise`'ing by the `region` to calculate average `AveragePrice` 
+
+---
+
+
+```r
+avocado_summary &lt;- avocado %&gt;%
+  group_by(region) %&gt;%
+  summarise(
+    pricePerRegion = mean(AveragePrice, na.rm = TRUE),
+    n = n()
+  )
+```
+---
+Let's use `slice_max` and `fct_reorder` to make a `geom_point` plot to present changes in the `pricePerRegion` for the most expensive 15 regions
+---
+
+Let's change it 
+
+```r
+avocado_summary %&gt;%
+  slice_max(pricePerRegion, n=15)%&gt;%
+ggplot(aes(pricePerRegion, fct_reorder(region, pricePerRegion))) + 
+  geom_point()
+```
+
+&lt;img src="lecture-5_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+---
+# fct_lump
+
+Sometimes you have TOO MANY factors and want to "lump them" together into  the small groups to make a plot or dataset simpler. That’s `fct_lump()`:
+
+
+By default it lump together the smallest groups 
+
+```r
+grad_lump&lt;-grad%&gt;%
+  mutate(subject = fct_lump(subject)) %&gt;%
+  count(subject)
+
+grad_lump
+```
+
+```
+## # A tibble: 2 x 2
+##   subject        n
+##   &lt;fct&gt;      &lt;int&gt;
+## 1 psychology   236
+## 2 Other        176
+```
+---
+
+---
+# Working with different data types and evaluating the quality of the data
+
+`skimr` package is fantastic to give "sense" to your dataset. Make sure you `install.packages("skimr")` before the first use!
+
+
+```r
+library(skimr)
+
+skim(avocado)
+```
+
+
+Table: Data summary
+
+|                         |        |
+|:------------------------|:-------|
+|Name                     |avocado |
+|Number of rows           |18249   |
+|Number of columns        |14      |
+|_______________________  |        |
+|Column type frequency:   |        |
+|character                |2       |
+|Date                     |1       |
+|numeric                  |11      |
+|________________________ |        |
+|Group variables          |None    |
+
+
+**Variable type: character**
+
+|skim_variable | n_missing| complete_rate| min| max| empty| n_unique| whitespace|
+|:-------------|---------:|-------------:|---:|---:|-----:|--------:|----------:|
+|type          |         0|             1|   7|  12|     0|        2|          0|
+|region        |         0|             1|   4|  19|     0|       54|          0|
+
+
+**Variable type: Date**
+
+|skim_variable | n_missing| complete_rate|min        |max        |median     | n_unique|
+|:-------------|---------:|-------------:|:----------|:----------|:----------|--------:|
+|Date          |         0|             1|2015-01-04 |2018-03-25 |2016-08-14 |      169|
+
+
+**Variable type: numeric**
+
+|skim_variable | n_missing| complete_rate|      mean|         sd|      p0|      p25|       p50|       p75|        p100|hist  |
+|:-------------|---------:|-------------:|---------:|----------:|-------:|--------:|---------:|---------:|-----------:|:-----|
+|X1            |         0|             1|     24.23|      15.48|    0.00|    10.00|     24.00|     38.00|       52.00|▇▆▆▆▆ |
+|AveragePrice  |         0|             1|      1.41|       0.40|    0.44|     1.10|      1.37|      1.66|        3.25|▂▇▅▁▁ |
+|Total Volume  |         0|             1| 850644.01| 3453545.36|   84.56| 10838.58| 107376.76| 432962.29| 62505646.52|▇▁▁▁▁ |
+|4046          |         0|             1| 293008.42| 1264989.08|    0.00|   854.07|   8645.30| 111020.20| 22743616.17|▇▁▁▁▁ |
+|4225          |         0|             1| 295154.57| 1204120.40|    0.00|  3008.78|  29061.02| 150206.86| 20470572.61|▇▁▁▁▁ |
+|4770          |         0|             1|  22839.74|  107464.07|    0.00|     0.00|    184.99|   6243.42|  2546439.11|▇▁▁▁▁ |
+|Total Bags    |         0|             1| 239639.20|  986242.40|    0.00|  5088.64|  39743.83| 110783.37| 19373134.37|▇▁▁▁▁ |
+|Small Bags    |         0|             1| 182194.69|  746178.51|    0.00|  2849.42|  26362.82|  83337.67| 13384586.80|▇▁▁▁▁ |
+|Large Bags    |         0|             1|  54338.09|  243965.96|    0.00|   127.47|   2647.71|  22029.25|  5719096.61|▇▁▁▁▁ |
+|XLarge Bags   |         0|             1|   3106.43|   17692.89|    0.00|     0.00|      0.00|    132.50|   551693.65|▇▁▁▁▁ |
+|year          |         0|             1|   2016.15|       0.94| 2015.00|  2015.00|   2016.00|   2017.00|     2018.00|▇▇▁▇▂ |
+---
+Let's look at `grad` data and work in pairs to discuss
+
+
+```r
+skim(grad)
+```
+
+
+Table: Data summary
+
+|                         |     |
+|:------------------------|:----|
+|Name                     |grad |
+|Number of rows           |412  |
+|Number of columns        |16   |
+|_______________________  |     |
+|Column type frequency:   |     |
+|character                |2    |
+|numeric                  |14   |
+|________________________ |     |
+|Group variables          |None |
+
+
+**Variable type: character**
+
+|skim_variable | n_missing| complete_rate| min| max| empty| n_unique| whitespace|
+|:-------------|---------:|-------------:|---:|---:|-----:|--------:|----------:|
+|subject       |         0|             1|   9|  10|     0|        4|          0|
+|Inst          |         0|             1|  14|  66|     0|      171|          0|
+
+
+**Variable type: numeric**
+
+|skim_variable      | n_missing| complete_rate|   mean|    sd|     p0|    p25|    p50|    p75|   p100|hist  |
+|:------------------|---------:|-------------:|------:|-----:|------:|------:|------:|------:|------:|:-----|
+|AvNumPubs          |         0|          1.00|   1.12|  1.11|   0.04|   0.51|   0.77|   1.28|   7.17|▇▂▁▁▁ |
+|AvNumCits          |         0|          1.00|   1.95|  1.28|   0.00|   0.96|   1.66|   2.69|   7.43|▇▆▃▁▁ |
+|PctFacGrants       |         0|          1.00|  54.66| 25.75|   0.00|  36.77|  55.55|  75.12| 100.00|▃▆▇▆▆ |
+|PctCompletion      |         1|          1.00|  44.18| 19.49|   0.00|  30.45|  43.70|  56.80| 100.00|▂▇▇▅▁ |
+|MedianTimetoDegree |         1|          1.00|   5.71|  1.03|   2.15|   5.00|   5.70|   6.10|  11.00|▁▇▇▁▁ |
+|PctMinorityFac     |         0|          1.00|   5.85|  6.93|   0.00|   0.00|   4.80|   8.38|  57.90|▇▁▁▁▁ |
+|PctFemaleFac       |         0|          1.00|  29.23| 16.18|   0.00|  15.75|  28.60|  40.00|  83.30|▆▇▆▂▁ |
+|PctFemaleStud      |         0|          1.00|  54.91| 19.57|   0.00|  38.45|  55.70|  71.40|  97.30|▁▆▆▇▂ |
+|PctIntlStud        |         0|          1.00|  27.90| 27.04|   0.00|   6.77|  15.85|  45.95|  98.20|▇▂▂▂▁ |
+|AvNumPhDs          |         0|          1.00|   7.03|  5.27|   1.00|   3.20|   5.40|   9.60|  26.80|▇▃▂▁▁ |
+|AvGREs             |         1|          1.00| 694.72| 67.19| 469.00| 645.00| 687.00| 753.00| 800.00|▁▁▇▇▇ |
+|TotFac             |         0|          1.00|  30.72| 20.04|   3.00|  16.00|  26.00|  39.00| 130.00|▇▅▁▁▁ |
+|PctAsstProf        |         6|          0.99|  16.28| 11.17|   0.00|   8.00|  16.00|  23.00|  75.00|▇▆▂▁▁ |
+|NumStud            |         0|          1.00|  54.52| 36.90|   2.00|  26.00|  44.00|  78.00| 182.00|▇▆▃▁▁ |
+---
+# Dates and times
+
+- Does every year have 365 days?
+- Does every day have 24 hours?
+- Does every minute have 60 seconds?
+
+Working with different date/time formats can be a nightmare or can bea breeze!
+with library `lubridate`
+---
+Make sure to install the library first
+
+
+```r
+install.packages("lubridate")
+```
+and then load it
+
+```r
+library(lubridate)
+```
+---
+
+Let's have some fun with some basic functions there
+
+
+```r
+today()
+```
+
+```
+## [1] "2020-08-18"
+```
+
+```r
+now()
+```
+
+```
+## [1] "2020-08-18 21:36:27 AEST"
+```
+---
+Have a look at the examples below and create your own!
+
+
+```r
+ymd("2017-01-31")
+```
+
+```
+## [1] "2017-01-31"
+```
+
+```r
+ymd(20170131)
+```
+
+```
+## [1] "2017-01-31"
+```
+
+```r
+dmy("31-Jan-2017")
+```
+
+```
+## [1] "2017-01-31"
+```
+
+```r
+ymd_hms("2017-01-31 20:11:59")
+```
+
+```
+## [1] "2017-01-31 20:11:59 UTC"
+```
+
+```r
+mdy_hm("01/31/2017 08:01")
+```
+
+```
+## [1] "2017-01-31 08:01:00 UTC"
+```
+---
+# Time spans
+
+- **durations**, which represent an exact number of seconds.
+- **periods**, which represent human units like weeks and months.
+- **intervals**, which represent a starting and ending point.
+---
+# Durations
+
+when you subtract two dates, you get a difftime object:
+
+How old is you?
+
+```r
+my_age &lt;- today() - ymd(19000112)
+my_age
+```
+
+```
+## Time difference of 44048 days
+```
+---
+A `difftime` class object records a time span of seconds, minutes, hours, days, or weeks. This ambiguity can make `difftimes` a little painful to work with, so `lubridate` provides an alternative which always uses seconds: the duration.
+
+
+```r
+dseconds(15)
+```
+
+```
+## [1] "15s"
+```
+
+```r
+# Also
+dseconds(15)
+```
+
+```
+## [1] "15s"
+```
+
+```r
+dminutes(10)
+```
+
+```
+## [1] "600s (~10 minutes)"
+```
+
+```r
+dhours(c(12, 24))
+```
+
+```
+## [1] "43200s (~12 hours)" "86400s (~1 days)"
+```
+
+```r
+ddays(0:5)
+```
+
+```
+## [1] "0s"                "86400s (~1 days)"  "172800s (~2 days)"
+## [4] "259200s (~3 days)" "345600s (~4 days)" "432000s (~5 days)"
+```
+
+```r
+dweeks(3)
+```
+
+```
+## [1] "1814400s (~3 weeks)"
+```
+
+```r
+dyears(1)
+```
+
+```
+## [1] "31557600s (~1 years)"
+```
+---
+# Strings = At the beginning there was a word!
+
+### Hello world! ;)
+
+You can create strings with either single quotes or double quotes.
+
+
+```r
+string1 &lt;- "This is a string"
+string2 &lt;- 'If I want to include a "quote" inside a string, I use single quotes'
+```
+---
+# String length
+
+`str_length()` tells you the number of characters in a string
+
+
+```r
+head(str_length(grad_summary$Inst))
+```
+
+```
+## [1] 19 24 17 17 14 17
+```
+---
+# Combining strings
+
+To combine two or more strings, use `str_c()`.
+
+Use the `sep` argument to control how they’re separated:
+
+
+```r
+head(
+  str_c(grad$subject, grad$Inst, sep=" ") 
+)
+```
+
+```
+## [1] "economics ARIZONA STATE UNIVERSITY" "economics AUBURN UNIVERSITY"       
+## [3] "economics BOSTON COLLEGE"           "economics BOSTON UNIVERSITY"       
+## [5] "economics BRANDEIS UNIVERSITY"      "economics BROWN UNIVERSITY"
+```
+
+---
+# Subsetting strings
+
+You can extract parts of a string using `str_sub()`. 
+
+`str_sub()` takes start and end arguments which give the (inclusive) position of the substring:
+
+
+```r
+head(
+  str_sub(grad$subject, start=1, end=3)
+)
+```
+
+```
+## [1] "eco" "eco" "eco" "eco" "eco" "eco"
+```
+
+```r
+# negative numbers count backwards from end
+head(
+  str_sub(grad$Inst, start=-3, end=-1)
+)
+```
+
+```
+## [1] "ITY" "ITY" "EGE" "ITY" "ITY" "ITY"
+```
+
+---
+# Maps
+
+To use `maps library`
+
+The maps package contains world mapping data as well as routines for displaying maps of countries, regions etc. The data are stored and accessed via a simple database. High resolution versions of these databases are provided by an additional package (mapdata) and compatible routines to convert between different mapping projections are provided by the mapproj package.
+- maps
+
+
+
+```r
+library(maps)
+library(mapdata)
+library(sp)
+aus&lt;-map("worldHires", "Australia", fill=TRUE, xlim=c(110,160),
+  ylim=c(-45,-5), mar=c(0,0,0,0))
+```
+
+&lt;img src="lecture-5_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
