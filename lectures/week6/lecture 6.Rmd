@@ -1,6 +1,6 @@
 ---
-title: "BCO6007: Lecture 5"
-subtitle: "Dealing with different datatypes"
+title: "BCO6007: Lecture 6"
+subtitle: "Introduction to modelling"
 author: "Dr Maria Prokofieva"
 institute: "VU Business School"
 output:
@@ -28,18 +28,16 @@ library(maps)
 ```
 #Key points
 
+- model and its variables
+- modelling workflow
+- types of modelling
 - `tidyverse` package
-- `lubridate` package
-- data types
-- data viz for different data types
+- `tidymodels` package
 
 .pull-left[
 ##Basic functions to review
 
-- tibbles
-- factors
-- date/times
-- maps
+- 
 ]
 .pull-right[
 If you want to get quick info on any function you type in the console
@@ -54,31 +52,46 @@ e.g
 
 1. Open your `RStudio.cloud` `BCO6007` project
 
-2. Create a new lecture R script document - e.g. lecture5.R
+2. Create a new lecture R script document - e.g. lecture6.R
 
 3. Practice all lecture examples there
 
-4. If your datasets from lecture 3 (lecture 4) are not there, load them using 
+4. load libraries `tidyverse` and install and load `tidymodels`
 
+5. load **new** dataset - 
 ---
 
-# Tibbles and tidy data
-`Tibbles` are data frames that satisfy the tidy data approach!
+# Modelling and model
+
+![ ](img/workflow.png)
+---
+# The Modeling Process
+
+Common steps during model building are: 
+
+- estimating model parameters (i.e. training models) 
+- setting "tuning" parameters 
+- comparing different models on the same data
+- calculating the performance of the final model that will generalize to new data 
+modelling = a marathon not short sprint! 
+---
+# What the Modeling Process Usually Looks Like
+
+`
+
+
+
+
+# Extract by name or by number!
 
 ```{r}
 grad<-read_csv("graduate-programs.csv")
 avocado<-read_csv("avocado.csv")
-```
----
-You can access individual variables in your tibble by using their position:
-- Extract by name or by number!
 
-```{r}
-head(grad$subject)
-head(grad[, 1])
+grad$subject
+grad[, 1]
 ```
 
----
 We can also access individual rows! using their number
 ```{r}
 grad[5,]
@@ -118,10 +131,7 @@ grad_summary <- grad %>%
     faculty = mean(TotFac, na.rm = TRUE),
     n = n()
   )
-```
----
 
-```{r}
 grad_summary %>%
   slice_max(students, n=10)%>%
 ggplot(aes(students, Inst)) + 
@@ -188,6 +198,7 @@ grad_lump<-grad%>%
 
 grad_lump
 ```
+---
 
 ---
 # Working with different data types and evaluating the quality of the data
@@ -286,31 +297,6 @@ string1 <- "This is a string"
 string2 <- 'If I want to include a "quote" inside a string, I use single quotes'
 ```
 ---
-
-# Matching strings
-`str_detect` is the function to match a string with a text to see if it can be found there. It returns `TRUE` (=yes, i can find it!) and `FALSE` (=sorry, none!)
-
-```{r}
-str_detect(grad$subject, "nomics") %>% head()
-```
----
-`str_detect` is very useful in `filter` and `select`!
-```{r}
-grad %>% 
-  filter(str_detect(subject, "econ")) %>%
-  head()
-```
----
-# Task
-
-Use `avocado` dataset and select all observations where `region` includes "on", count the number of occurrences for each region
-
-```{r}
-avocado %>% 
-  filter(str_detect(region, "on")) %>%
-  count(region)
-```
----
 # String length
 
 `str_length()` tells you the number of characters in a string
@@ -330,6 +316,7 @@ head(
   str_c(grad$subject, grad$Inst, sep=" ") 
 )
 ```
+
 ---
 # Subsetting strings
 
@@ -341,7 +328,13 @@ You can extract parts of a string using `str_sub()`.
 head(
   str_sub(grad$subject, start=1, end=3)
 )
+
+# negative numbers count backwards from end
+head(
+  str_sub(grad$Inst, start=-3, end=-1)
+)
 ```
+
 ---
 # Maps
 

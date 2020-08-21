@@ -23,7 +23,7 @@ class: center, middle, inverse, title-slide
 #Key points
 
 - `tidyverse` package
-- `maps` package
+- `lubridate` package
 - data types
 - data viz for different data types
 
@@ -58,127 +58,43 @@ e.g
 ---
 
 # Tibbles and tidy data
-
 `Tibbles` are data frames that satisfy the tidy data approach!
-You can access individual variables in your tibble by using their position:
-
-# Extract by name or by number!
 
 
 ```r
 grad&lt;-read_csv("graduate-programs.csv")
 avocado&lt;-read_csv("avocado.csv")
+```
+---
+You can access individual variables in your tibble by using their position:
+- Extract by name or by number!
 
-grad$subject
+
+```r
+head(grad$subject)
 ```
 
 ```
-##   [1] "economics"  "economics"  "economics"  "economics"  "economics" 
-##   [6] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [11] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [16] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [21] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [26] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [31] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [36] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [41] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [46] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [51] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [56] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [61] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [66] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [71] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [76] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [81] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [86] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [91] "economics"  "economics"  "economics"  "economics"  "economics" 
-##  [96] "economics"  "economics"  "economics"  "economics"  "economics" 
-## [101] "economics"  "economics"  "economics"  "economics"  "economics" 
-## [106] "economics"  "economics"  "economics"  "economics"  "economics" 
-## [111] "economics"  "economics"  "economics"  "economics"  "economics" 
-## [116] "economics"  "economics"  "entomology" "entomology" "entomology"
-## [121] "entomology" "entomology" "entomology" "entomology" "entomology"
-## [126] "entomology" "entomology" "entomology" "entomology" "entomology"
-## [131] "entomology" "entomology" "entomology" "entomology" "entomology"
-## [136] "entomology" "entomology" "entomology" "entomology" "entomology"
-## [141] "entomology" "entomology" "entomology" "entomology" "astronomy" 
-## [146] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
-## [151] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
-## [156] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
-## [161] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
-## [166] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
-## [171] "astronomy"  "astronomy"  "astronomy"  "astronomy"  "astronomy" 
-## [176] "astronomy"  "psychology" "psychology" "psychology" "psychology"
-## [181] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [186] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [191] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [196] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [201] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [206] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [211] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [216] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [221] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [226] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [231] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [236] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [241] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [246] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [251] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [256] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [261] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [266] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [271] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [276] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [281] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [286] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [291] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [296] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [301] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [306] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [311] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [316] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [321] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [326] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [331] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [336] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [341] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [346] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [351] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [356] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [361] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [366] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [371] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [376] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [381] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [386] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [391] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [396] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [401] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [406] "psychology" "psychology" "psychology" "psychology" "psychology"
-## [411] "psychology" "psychology"
+## [1] "economics" "economics" "economics" "economics" "economics" "economics"
 ```
 
 ```r
-grad[, 1]
+head(grad[, 1])
 ```
 
 ```
-## # A tibble: 412 x 1
-##    subject  
-##    &lt;chr&gt;    
-##  1 economics
-##  2 economics
-##  3 economics
-##  4 economics
-##  5 economics
-##  6 economics
-##  7 economics
-##  8 economics
-##  9 economics
-## 10 economics
-## # … with 402 more rows
+## # A tibble: 6 x 1
+##   subject  
+##   &lt;chr&gt;    
+## 1 economics
+## 2 economics
+## 3 economics
+## 4 economics
+## 5 economics
+## 6 economics
 ```
 
+---
 We can also access individual rows! using their number
 
 ```r
@@ -239,14 +155,18 @@ grad_summary &lt;- grad %&gt;%
     faculty = mean(TotFac, na.rm = TRUE),
     n = n()
   )
+```
+---
 
+
+```r
 grad_summary %&gt;%
   slice_max(students, n=10)%&gt;%
 ggplot(aes(students, Inst)) + 
   geom_point()
 ```
 
-&lt;img src="lecture-5_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture-5_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 ---
 It is difficult to interpret this plot because there’s no overall pattern. We can improve it by reordering the levels of `Inst` using `fct_reorder()`. 
 
@@ -268,7 +188,7 @@ ggplot(aes(students, fct_reorder(Inst, students))) +
   geom_point()
 ```
 
-&lt;img src="lecture-5_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture-5_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 ---
 Task:
 
@@ -300,7 +220,7 @@ ggplot(aes(pricePerRegion, fct_reorder(region, pricePerRegion))) +
   geom_point()
 ```
 
-&lt;img src="lecture-5_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture-5_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 ---
 # fct_lump
 
@@ -466,7 +386,7 @@ today()
 ```
 
 ```
-## [1] "2020-08-18"
+## [1] "2020-08-21"
 ```
 
 ```r
@@ -474,7 +394,7 @@ now()
 ```
 
 ```
-## [1] "2020-08-18 21:36:27 AEST"
+## [1] "2020-08-21 11:46:31 AEST"
 ```
 ---
 Have a look at the examples below and create your own!
@@ -538,7 +458,7 @@ my_age
 ```
 
 ```
-## Time difference of 44048 days
+## Time difference of 44051 days
 ```
 ---
 A `difftime` class object records a time span of seconds, minutes, hours, days, or weeks. This ambiguity can make `difftimes` a little painful to work with, so `lubridate` provides an alternative which always uses seconds: the duration.
@@ -693,7 +613,7 @@ aus&lt;-map("worldHires", "Australia", fill=TRUE, xlim=c(110,160),
   ylim=c(-45,-5), mar=c(0,0,0,0))
 ```
 
-&lt;img src="lecture-5_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="lecture-5_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
