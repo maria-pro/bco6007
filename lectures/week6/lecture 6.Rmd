@@ -39,7 +39,17 @@ library(maps)
 ##Basic functions to review
 
 `na.rm`
-
+`skim`
+`initial_split`
+`training`
+`testing`
+`glimpse`
+`recipe`
+`prep`
+`step_corr`
+`step_center`
+`step_scale`
+`all_predictors`
 - 
 ]
 .pull-right[
@@ -145,6 +155,21 @@ modelling = a marathon not short sprint!
 # What the Modeling Process Usually Looks Like
 
 ![ ](img/workflow2.png)
+
+---
+# Input vs output vatiables
+
+Input variables: "independent", predictors
+- variables you put in your model
+= your "dough"
+
+Output variables: "dependent" variables
+- response variables
+- your "pasta" you make
+
+Let's think about some examples!
+---
+![ ](img/stirfry.png)
 ---
 # Why train? Why test?
 

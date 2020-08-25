@@ -33,7 +33,17 @@ class: center, middle, inverse, title-slide
 ##Basic functions to review
 
 `na.rm`
-
+`skim`
+`initial_split`
+`training`
+`testing`
+`glimpse`
+`recipe`
+`prep`
+`step_corr`
+`step_center`
+`step_scale`
+`all_predictors`
 - 
 ]
 .pull-right[
@@ -72,11 +82,11 @@ Models are everywhere!
 ---
 # Model and variables
 
-**Model** is a rrepresentation of something which provides some information about it.
+**Model** is a representation of something which provides some information about it.
 
 The aim is to **train a model** that can be used for **inference** (= "educated guess"), making **predictions** on new **data points**.
 
---
+---
 # Modelling and model
 
 ![ ](img/workflow.png)
@@ -106,6 +116,8 @@ modeling as pasta making!
 4. Once you are happy with the settings on your pasta machine you take your "main" dough and start making your pasta!
 
 5. Once your settings are "set" you do not change them a lot - may be just fine tuning to adjust to your dough
+---
+# How do you make your pasta by hand?
 
 ![ ](img/pastamachine.png)
 ---
@@ -120,6 +132,7 @@ modeling as pasta making!
 4. Once you are happy with the settings on your pasta machine you take your "main" dough and start making your pasta! (= use your model on the "testing" dough, oh.. DATA!)
 
 5. Once your settings are "set" you do not change them a lot - may be just fine tuning to adjust to your dough (= model is ready for use!)
+---
 
 ![ ](img/pastamachine.png)
 
@@ -138,6 +151,21 @@ modelling = a marathon not short sprint!
 # What the Modeling Process Usually Looks Like
 
 ![ ](img/workflow2.png)
+
+---
+# Input vs output vatiables
+
+Input variables: "independent", predictors
+- variables you put in your model
+= your "dough"
+
+Output variables: "dependent" variables
+- response variables
+- your "pasta" you make
+
+Let's think about some examples!
+---
+![ ](img/stirfry.png)
 ---
 # Why train? Why test?
 
@@ -146,7 +174,7 @@ modelling = a marathon not short sprint!
 = but can we look into the future? Time machine?
 
 = let's pretend that part of our "past" is the "future!
-
+---
 ![ ](img/testVsTrain.jpg)
 ---
 # Training vs testing data
@@ -161,6 +189,7 @@ Testing data is for "evaluation" the model
 What if your new data is very different from what you used for modeling?
 
 What if your data is "not enough"?
+---
 
 ![ ](img/swan.png)
 ---
@@ -225,7 +254,7 @@ mean(grad$PctAsstProf, na.rm=TRUE)
 
 Too "different" observations
 
-![ ](img/outlier3.png)
+![ ](img/out.png)
 ---
 # Why outliers are bad?
 
