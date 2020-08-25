@@ -39,16 +39,27 @@ library(maps)
 ##Basic functions to review
 
 `na.rm`
+
 `skim`
+
 `initial_split`
+
 `training`
+
 `testing`
+
 `glimpse`
+
 `recipe`
+
 `prep`
+
 `step_corr`
+
 `step_center`
+
 `step_scale`
+
 `all_predictors`
 - 
 ]
@@ -270,7 +281,6 @@ Examine your data
 library(skimr)
 
 grad %>%
-  select (AvNumPub, PctFacGrants,NumStud)
   skim()
 ```
 ---
