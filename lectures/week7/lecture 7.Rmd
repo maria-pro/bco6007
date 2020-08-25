@@ -1,0 +1,365 @@
+---
+title: "BCO6007: Lecture 5"
+subtitle: "Dealing with different datatypes"
+author: "Dr Maria Prokofieva"
+institute: "VU Business School"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = TRUE,   
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.height = 4,
+                      fig.width = 8,
+                      fig.align = "center")
+library(tidyverse)
+library(lubridate)
+library(maps)
+```
+#Key points
+
+- `tidyverse` package
+- `lubridate` package
+- data types
+- data viz for different data types
+
+.pull-left[
+##Basic functions to review
+
+- tibbles
+- factors
+- date/times
+- maps
+]
+.pull-right[
+If you want to get quick info on any function you type in the console
+`?NameOfFunction`
+e.g 
+```{r}
+?slice
+```
+]
+---
+#Workflow for the lecture
+
+1. Open your `RStudio.cloud` `BCO6007` project
+
+2. Create a new lecture R script document - e.g. lecture5.R
+
+3. Practice all lecture examples there
+
+4. If your datasets from lecture 3 (lecture 4) are not there, load them using 
+
+---
+
+# Tibbles and tidy data
+`Tibbles` are data frames that satisfy the tidy data approach!
+
+```{r}
+grad<-read_csv("graduate-programs.csv")
+avocado<-read_csv("avocado.csv")
+```
+---
+You can access individual variables in your tibble by using their position:
+- Extract by name or by number!
+
+```{r}
+head(grad$subject)
+head(grad[, 1])
+```
+
+---
+We can also access individual rows! using their number
+```{r}
+grad[5,]
+
+#OR
+
+grad[5,8]
+```
+---
+# Factors
+
+In R, `factors` are used to work with *categorical variables*, variables that have a fixed and known set of possible values. They are also useful when you want to display character vectors in a non-alphabetical order.
+
+Can you give me examples of categorical variables?
+
+Have a look at the `avocado` dataset and tell which variables "should" be categorical ones
+
+---
+# Working with factors
+
+If for some reason, your data is recorded as a character string and you need to convert it to a factor, use `as_factor()` command.
+
+Have a look at the `Help` and tell me how to do this for `region` variable in the `avocado` dataset
+
+Also, let's have a look at our `grad` dataset and identify "possible" factors there
+
+---
+# Modifying factor order
+
+It’s often useful to change the order of the factor levels in a visualisation. 
+
+```{r}
+grad_summary <- grad %>%
+  group_by(Inst) %>%
+  summarise(
+    students = mean(NumStud, na.rm = TRUE),
+    faculty = mean(TotFac, na.rm = TRUE),
+    n = n()
+  )
+```
+---
+
+```{r}
+grad_summary %>%
+  slice_max(students, n=10)%>%
+ggplot(aes(students, Inst)) + 
+  geom_point()
+```
+---
+It is difficult to interpret this plot because there’s no overall pattern. We can improve it by reordering the levels of `Inst` using `fct_reorder()`. 
+
+`fct_reorder()` takes three arguments:
+
+- `f`, the factor whose levels you want to modify.
+
+- `x`, a numeric vector that you want to use to reorder the levels.
+
+- Optionally, `fun`, a `function` that’s used `if` there are multiple values of `x` for each value of `f`. 
+---
+
+Let's change it 
+```{r}
+grad_summary %>%
+  slice_max(students, n=10)%>%
+ggplot(aes(students, fct_reorder(Inst, students))) + 
+  geom_point()
+```
+---
+Task:
+
+With `avocado` data, 
+
+1. create a summary dataset by `summarise`'ing by the `region` to calculate average `AveragePrice` 
+
+---
+
+```{r}
+avocado_summary <- avocado %>%
+  group_by(region) %>%
+  summarise(
+    pricePerRegion = mean(AveragePrice, na.rm = TRUE),
+    n = n()
+  )
+```
+---
+Let's use `slice_max` and `fct_reorder` to make a `geom_point` plot to present changes in the `pricePerRegion` for the most expensive 15 regions
+---
+
+Let's change it 
+```{r}
+avocado_summary %>%
+  slice_max(pricePerRegion, n=15)%>%
+ggplot(aes(pricePerRegion, fct_reorder(region, pricePerRegion))) + 
+  geom_point()
+```
+---
+# fct_lump
+
+Sometimes you have TOO MANY factors and want to "lump them" together into  the small groups to make a plot or dataset simpler. That’s `fct_lump()`:
+
+
+By default it lump together the smallest groups 
+```{r}
+grad_lump<-grad%>%
+  mutate(subject = fct_lump(subject)) %>%
+  count(subject)
+
+grad_lump
+```
+
+---
+# Working with different data types and evaluating the quality of the data
+
+`skimr` package is fantastic to give "sense" to your dataset. Make sure you `install.packages("skimr")` before the first use!
+
+```{r}
+library(skimr)
+
+skim(avocado)
+```
+---
+Let's look at `grad` data and work in pairs to discuss
+
+```{r}
+skim(grad)
+```
+---
+# Dates and times
+
+- Does every year have 365 days?
+- Does every day have 24 hours?
+- Does every minute have 60 seconds?
+
+Working with different date/time formats can be a nightmare or can bea breeze!
+with library `lubridate`
+---
+Make sure to install the library first
+
+```{r eval=FALSE}
+install.packages("lubridate")
+```
+and then load it
+```{r}
+library(lubridate)
+```
+---
+
+Let's have some fun with some basic functions there
+
+``` {r}
+today()
+now()
+```
+---
+Have a look at the examples below and create your own!
+
+```{r}
+ymd("2017-01-31")
+ymd(20170131)
+
+dmy("31-Jan-2017")
+
+ymd_hms("2017-01-31 20:11:59")
+mdy_hm("01/31/2017 08:01")
+```
+---
+# Time spans
+
+- **durations**, which represent an exact number of seconds.
+- **periods**, which represent human units like weeks and months.
+- **intervals**, which represent a starting and ending point.
+---
+# Durations
+
+when you subtract two dates, you get a difftime object:
+
+How old is you?
+```{r}
+my_age <- today() - ymd(19000112)
+my_age
+```
+---
+A `difftime` class object records a time span of seconds, minutes, hours, days, or weeks. This ambiguity can make `difftimes` a little painful to work with, so `lubridate` provides an alternative which always uses seconds: the duration.
+
+```{r}
+dseconds(15)
+
+# Also
+dseconds(15)
+dminutes(10)
+dhours(c(12, 24))
+ddays(0:5)
+dweeks(3)
+dyears(1)
+```
+---
+# Strings = At the beginning there was a word!
+
+### Hello world! ;)
+
+You can create strings with either single quotes or double quotes.
+
+```{r}
+string1 <- "This is a string"
+string2 <- 'If I want to include a "quote" inside a string, I use single quotes'
+```
+---
+
+# Matching strings
+`str_detect` is the function to match a string with a text to see if it can be found there. It returns `TRUE` (=yes, i can find it!) and `FALSE` (=sorry, none!)
+
+```{r}
+str_detect(grad$subject, "nomics") %>% head()
+```
+---
+`str_detect` is very useful in `filter` and `select`!
+```{r}
+grad %>% 
+  filter(str_detect(subject, "econ")) %>%
+  head()
+```
+---
+# Task
+
+Use `avocado` dataset and select all observations where `region` includes "on", count the number of occurrences for each region
+
+```{r}
+avocado %>% 
+  filter(str_detect(region, "on")) %>%
+  count(region)
+```
+---
+# String length
+
+`str_length()` tells you the number of characters in a string
+
+```{r}
+head(str_length(grad_summary$Inst))
+```
+---
+# Combining strings
+
+To combine two or more strings, use `str_c()`.
+
+Use the `sep` argument to control how they’re separated:
+
+```{r}
+head(
+  str_c(grad$subject, grad$Inst, sep=" ") 
+)
+```
+---
+# Subsetting strings
+
+You can extract parts of a string using `str_sub()`. 
+
+`str_sub()` takes start and end arguments which give the (inclusive) position of the substring:
+
+```{r}
+head(
+  str_sub(grad$subject, start=1, end=3)
+)
+```
+---
+# Maps
+
+To use `maps library`
+
+The maps package contains world mapping data as well as routines for displaying maps of countries, regions etc. The data are stored and accessed via a simple database. High resolution versions of these databases are provided by an additional package (mapdata) and compatible routines to convert between different mapping projections are provided by the mapproj package.
+- maps
+
+
+```{r}
+library(maps)
+library(mapdata)
+library(sp)
+aus<-map("worldHires", "Australia", fill=TRUE, xlim=c(110,160),
+  ylim=c(-45,-5), mar=c(0,0,0,0))
+```
+
+
+
+
+

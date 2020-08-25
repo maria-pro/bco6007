@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>BCO6007: Lecture 6</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr Maria Prokofieva" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# BCO6007: Lecture 6
+## Introduction to modelling
+### Dr Maria Prokofieva
+### VU Business School
+
+---
+
+
+
+#Key points
+
+- model and its variables
+- modelling workflow
+- types of modelling
+- data preparation
+- `tidyverse` package
+- `tidymodels` package
+
+.pull-left[
+##Basic functions to review
+
+`na.rm`
+
+- 
+]
+.pull-right[
+If you want to get quick info on any function you type in the console
+`?NameOfFunction`
+e.g 
+
+```r
+?slice
+```
+]
+---
+#Workflow for the lecture
+
+1. Open your `RStudio.cloud` `BCO6007` project
+
+2. Create a new lecture R script document - e.g. lecture6.R
+
+3. Practice all lecture examples there
+
+4. load libraries `tidyverse` and install and load `tidymodels`
+
+5. load datasets - 
+
+```r
+grad&lt;-read_csv("graduate-programs.csv")
+avocado&lt;-read_csv("avocado.csv")
+```
+---
+# Introduction to modeling 
+
+Models are everywhere!
+
+
+
+---
+# Model and variables
+
+**Model** is a rrepresentation of something which provides some information about it.
+
+The aim is to **train a model** that can be used for **inference** (= "educated guess"), making **predictions** on new **data points**.
+
+--
+# Modelling and model
+
+![ ](img/workflow.png)
+---
+# What is the aim of modeling?
+
+- Build your model with your training data
+- Choose your model with your validation data, or resampled datasets
+- Evaluate your model with your testing data
+
+![ ](img/modeling.png)
+---
+
+# What is a model
+
+modeling as pasta making!
+
+![ ](img/pasta.jpg)
+# How do you make your pasta by hand?
+
+1. you have your dough
+
+2. your split your dough and start experimenting!
+
+3. your take your pasta machine and play with settings to set the "perfect" width/length/colour (?)
+
+4. Once you are happy with the settings on your pasta machine you take your "main" dough and start making your pasta!
+
+5. Once your settings are "set" you do not change them a lot - may be just fine tuning to adjust to your dough
+
+![ ](img/pastamachine.png)
+---
+# Now let's use proper terminology
+
+1. you have your dough (= prepare your data)
+
+2. your split your dough and start experimenting! (= split your data into *testing* and *training* set)
+
+3. your take your pasta machine and play with settings to set the "perfect" width/length/colour (?) (= set your model using the "training" dough, oh... DATA!)
+
+4. Once you are happy with the settings on your pasta machine you take your "main" dough and start making your pasta! (= use your model on the "testing" dough, oh.. DATA!)
+
+5. Once your settings are "set" you do not change them a lot - may be just fine tuning to adjust to your dough (= model is ready for use!)
+
+![ ](img/pastamachine.png)
+
+---
+# The Modeling Process
+
+Common steps during model building are: 
+
+- preparing data
+- estimating model parameters (i.e. training models) 
+- setting "tuning" parameters 
+- comparing different models on the same data
+- calculating the performance of the final model that will generalize to new data 
+modelling = a marathon not short sprint! 
+---
+# What the Modeling Process Usually Looks Like
+
+![ ](img/workflow2.png)
+---
+# Why train? Why test?
+
+= let's look in the past to see what our future will look like!
+
+= but can we look into the future? Time machine?
+
+= let's pretend that part of our "past" is the "future!
+
+![ ](img/testVsTrain.jpg)
+---
+# Training vs testing data
+
+Training data is for "training" the model
+Testing data is for "evaluation" the model
+
+![ ](img/testingTraining.jpg)
+---
+#Question:
+
+What if your new data is very different from what you used for modeling?
+
+What if your data is "not enough"?
+
+![ ](img/swan.png)
+---
+# So we go and "model" and now
+
+![ ](img/black.png)
+---
+
+# and NOW!
+
+![ ](img/blackswans.png)
+---
+# Data preparation
+
+Success of modelling depends on the "quality" of data
+
+80% of time is spent on preparing data!
+
+Common issues:
+
+- missing data
+
+- outliers and wrongly recorded data
+
+- variables are too closely related (=correlated)
+
+- "variance" (=variability) in data
+---
+
+# Missing data
+
+= no data value is stored for the variable in an observation
+
+Usually, recorded as **NA** instead of values
+
+`is.na` function returns `TRUE` for `NA`
+
+
+```r
+  sum(is.na(grad$PctAsstProf))
+```
+
+```
+## [1] 6
+```
+---
+# Missing data
+
+Tasks: discuss why missing values is a serious issue for data analysis
+
+A common treatment is to remove `NA` in functions: e.g. `na.rm=TRUE`
+
+```r
+mean(grad$PctAsstProf, na.rm=TRUE)
+```
+
+```
+## [1] 16.28325
+```
+---
+# Outliers and wrongly recorded data
+
+Too "different" observations
+
+![ ](img/outlier3.png)
+---
+# Why outliers are bad?
+
+![ ](img/outlier2.png)
+
+---
+# What to do with outliers?
+
+- remove from the data
+
+- replace with "normal" data points
+---
+# How to detect outliers?
+
+Examine your data
+
+
+```r
+#install.packages("skimr")
+library(skimr)
+
+grad %&gt;%
+  select (AvNumPub, PctFacGrants,NumStud)
+  skim()
+```
+---
+#Means and sd
+
+Mean= average
+
+sd= standard deviation (sounds scary!)
+= how much the members of a group differ from the mean value for the group
+
+If `sd` is too high, you may have an outlier! 
+---
+# `Tidymodels` package
+
+Works magic with modeling taking all the stats away.
+
+
+```r
+install.packages("tidymodels")
+```
+
+The `tidymodels` framework is a collection of packages for modeling and machine learning using `tidyverse` principles.
+
+Read it [here](https://www.tidymodels.org/)
+---
+# How to work with tidymodels
+
+![ ](img/tidymodels.png)
+---
+# What is for next week?
+
+Step 2 - Train the model (to be discussed next week!)
+
+Three concepts in specifying a model
+
+- Model type
+- Model mode
+- Model engine
+---
+# Let's have some pasta!
+
+![ ](img/pasta.png)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

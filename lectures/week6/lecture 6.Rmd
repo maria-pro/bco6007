@@ -31,11 +31,14 @@ library(maps)
 - model and its variables
 - modelling workflow
 - types of modelling
+- data preparation
 - `tidyverse` package
 - `tidymodels` package
 
 .pull-left[
 ##Basic functions to review
+
+`na.rm`
 
 - 
 ]
@@ -58,17 +61,81 @@ e.g
 
 4. load libraries `tidyverse` and install and load `tidymodels`
 
-5. load **new** dataset - 
+5. load datasets - 
+```{r}
+grad<-read_csv("graduate-programs.csv")
+avocado<-read_csv("avocado.csv")
+```
 ---
+# Introduction to modeling 
 
+Models are everywhere!
+
+
+
+---
+# Model and variables
+
+**Model** is a representation of something which provides some information about it.
+
+The aim is to **train a model** that can be used for **inference** (= "educated guess"), making **predictions** on new **data points**.
+
+---
 # Modelling and model
 
 ![ ](img/workflow.png)
+---
+# What is the aim of modeling?
+
+- Build your model with your training data
+- Choose your model with your validation data, or resampled datasets
+- Evaluate your model with your testing data
+
+![ ](img/modeling.png)
+---
+
+# What is a model
+
+modeling as pasta making!
+
+![ ](img/pasta.jpg)
+# How do you make your pasta by hand?
+
+1. you have your dough
+
+2. your split your dough and start experimenting!
+
+3. your take your pasta machine and play with settings to set the "perfect" width/length/colour (?)
+
+4. Once you are happy with the settings on your pasta machine you take your "main" dough and start making your pasta!
+
+5. Once your settings are "set" you do not change them a lot - may be just fine tuning to adjust to your dough
+---
+# How do you make your pasta by hand?
+
+![ ](img/pastamachine.png)
+---
+# Now let's use proper terminology
+
+1. you have your dough (= prepare your data)
+
+2. your split your dough and start experimenting! (= split your data into *testing* and *training* set)
+
+3. your take your pasta machine and play with settings to set the "perfect" width/length/colour (?) (= set your model using the "training" dough, oh... DATA!)
+
+4. Once you are happy with the settings on your pasta machine you take your "main" dough and start making your pasta! (= use your model on the "testing" dough, oh.. DATA!)
+
+5. Once your settings are "set" you do not change them a lot - may be just fine tuning to adjust to your dough (= model is ready for use!)
+---
+
+![ ](img/pastamachine.png)
+
 ---
 # The Modeling Process
 
 Common steps during model building are: 
 
+- preparing data
 - estimating model parameters (i.e. training models) 
 - setting "tuning" parameters 
 - comparing different models on the same data
@@ -77,282 +144,147 @@ modelling = a marathon not short sprint!
 ---
 # What the Modeling Process Usually Looks Like
 
-`
+![ ](img/workflow2.png)
+---
+# Why train? Why test?
 
+= let's look in the past to see what our future will look like!
 
+= but can we look into the future? Time machine?
 
+= let's pretend that part of our "past" is the "future!
+---
+![ ](img/testVsTrain.jpg)
+---
+# Training vs testing data
 
-# Extract by name or by number!
+Training data is for "training" the model
+Testing data is for "evaluation" the model
+
+![ ](img/testingTraining.jpg)
+---
+#Question:
+
+What if your new data is very different from what you used for modeling?
+
+What if your data is "not enough"?
+---
+
+![ ](img/swan.png)
+---
+# So we go and "model" and now
+
+![ ](img/black.png)
+---
+
+# and NOW!
+
+![ ](img/blackswans.png)
+---
+# Data preparation
+
+Success of modelling depends on the "quality" of data
+
+80% of time is spent on preparing data!
+
+Common issues:
+
+- missing data
+
+- outliers and wrongly recorded data
+
+- variables are too closely related (=correlated)
+
+- "variance" (=variability) in data
+---
+
+# Missing data
+
+= no data value is stored for the variable in an observation
+
+Usually, recorded as **NA** instead of values
+
+`is.na` function returns `TRUE` for `NA`
 
 ```{r}
-grad<-read_csv("graduate-programs.csv")
-avocado<-read_csv("avocado.csv")
-
-grad$subject
-grad[, 1]
+  sum(is.na(grad$PctAsstProf))
 ```
+---
+# Missing data
 
-We can also access individual rows! using their number
+Tasks: discuss why missing values is a serious issue for data analysis
+
+A common treatment is to remove `NA` in functions: e.g. `na.rm=TRUE`
 ```{r}
-grad[5,]
-
-#OR
-
-grad[5,8]
+mean(grad$PctAsstProf, na.rm=TRUE)
 ```
 ---
-# Factors
+# Outliers and wrongly recorded data
 
-In R, `factors` are used to work with *categorical variables*, variables that have a fixed and known set of possible values. They are also useful when you want to display character vectors in a non-alphabetical order.
+Too "different" observations
 
-Can you give me examples of categorical variables?
+![ ](img/out.png)
+---
+# Why outliers are bad?
 
-Have a look at the `avocado` dataset and tell which variables "should" be categorical ones
+![ ](img/outlier2.png)
 
 ---
-# Working with factors
+# What to do with outliers?
 
-If for some reason, your data is recorded as a character string and you need to convert it to a factor, use `as_factor()` command.
+- remove from the data
 
-Have a look at the `Help` and tell me how to do this for `region` variable in the `avocado` dataset
-
-Also, let's have a look at our `grad` dataset and identify "possible" factors there
-
+- replace with "normal" data points
 ---
-# Modifying factor order
+# How to detect outliers?
 
-It’s often useful to change the order of the factor levels in a visualisation. 
-
-```{r}
-grad_summary <- grad %>%
-  group_by(Inst) %>%
-  summarise(
-    students = mean(NumStud, na.rm = TRUE),
-    faculty = mean(TotFac, na.rm = TRUE),
-    n = n()
-  )
-
-grad_summary %>%
-  slice_max(students, n=10)%>%
-ggplot(aes(students, Inst)) + 
-  geom_point()
-```
----
-It is difficult to interpret this plot because there’s no overall pattern. We can improve it by reordering the levels of `Inst` using `fct_reorder()`. 
-
-`fct_reorder()` takes three arguments:
-
-- `f`, the factor whose levels you want to modify.
-
-- `x`, a numeric vector that you want to use to reorder the levels.
-
-- Optionally, `fun`, a `function` that’s used `if` there are multiple values of `x` for each value of `f`. 
----
-
-Let's change it 
-```{r}
-grad_summary %>%
-  slice_max(students, n=10)%>%
-ggplot(aes(students, fct_reorder(Inst, students))) + 
-  geom_point()
-```
----
-Task:
-
-With `avocado` data, 
-
-1. create a summary dataset by `summarise`'ing by the `region` to calculate average `AveragePrice` 
-
----
-
-```{r}
-avocado_summary <- avocado %>%
-  group_by(region) %>%
-  summarise(
-    pricePerRegion = mean(AveragePrice, na.rm = TRUE),
-    n = n()
-  )
-```
----
-Let's use `slice_max` and `fct_reorder` to make a `geom_point` plot to present changes in the `pricePerRegion` for the most expensive 15 regions
----
-
-Let's change it 
-```{r}
-avocado_summary %>%
-  slice_max(pricePerRegion, n=15)%>%
-ggplot(aes(pricePerRegion, fct_reorder(region, pricePerRegion))) + 
-  geom_point()
-```
----
-# fct_lump
-
-Sometimes you have TOO MANY factors and want to "lump them" together into  the small groups to make a plot or dataset simpler. That’s `fct_lump()`:
-
-
-By default it lump together the smallest groups 
-```{r}
-grad_lump<-grad%>%
-  mutate(subject = fct_lump(subject)) %>%
-  count(subject)
-
-grad_lump
-```
----
-
----
-# Working with different data types and evaluating the quality of the data
-
-`skimr` package is fantastic to give "sense" to your dataset. Make sure you `install.packages("skimr")` before the first use!
-
-```{r}
-library(skimr)
-
-skim(avocado)
-```
----
-Let's look at `grad` data and work in pairs to discuss
-
-```{r}
-skim(grad)
-```
----
-# Dates and times
-
-- Does every year have 365 days?
-- Does every day have 24 hours?
-- Does every minute have 60 seconds?
-
-Working with different date/time formats can be a nightmare or can bea breeze!
-with library `lubridate`
----
-Make sure to install the library first
+Examine your data
 
 ```{r eval=FALSE}
-install.packages("lubridate")
-```
-and then load it
-```{r}
-library(lubridate)
-```
----
+#install.packages("skimr")
+library(skimr)
 
-Let's have some fun with some basic functions there
-
-``` {r}
-today()
-now()
+grad %>%
+  select (AvNumPub, PctFacGrants,NumStud)
+  skim()
 ```
 ---
-Have a look at the examples below and create your own!
+#Means and sd
 
-```{r}
-ymd("2017-01-31")
-ymd(20170131)
+Mean= average
 
-dmy("31-Jan-2017")
+sd= standard deviation (sounds scary!)
+= how much the members of a group differ from the mean value for the group
 
-ymd_hms("2017-01-31 20:11:59")
-mdy_hm("01/31/2017 08:01")
-```
+If `sd` is too high, you may have an outlier! 
 ---
-# Time spans
+# `Tidymodels` package
 
-- **durations**, which represent an exact number of seconds.
-- **periods**, which represent human units like weeks and months.
-- **intervals**, which represent a starting and ending point.
----
-# Durations
+Works magic with modeling taking all the stats away.
 
-when you subtract two dates, you get a difftime object:
-
-How old is you?
-```{r}
-my_age <- today() - ymd(19000112)
-my_age
-```
----
-A `difftime` class object records a time span of seconds, minutes, hours, days, or weeks. This ambiguity can make `difftimes` a little painful to work with, so `lubridate` provides an alternative which always uses seconds: the duration.
-
-```{r}
-dseconds(15)
-
-# Also
-dseconds(15)
-dminutes(10)
-dhours(c(12, 24))
-ddays(0:5)
-dweeks(3)
-dyears(1)
-```
----
-# Strings = At the beginning there was a word!
-
-### Hello world! ;)
-
-You can create strings with either single quotes or double quotes.
-
-```{r}
-string1 <- "This is a string"
-string2 <- 'If I want to include a "quote" inside a string, I use single quotes'
-```
----
-# String length
-
-`str_length()` tells you the number of characters in a string
-
-```{r}
-head(str_length(grad_summary$Inst))
-```
----
-# Combining strings
-
-To combine two or more strings, use `str_c()`.
-
-Use the `sep` argument to control how they’re separated:
-
-```{r}
-head(
-  str_c(grad$subject, grad$Inst, sep=" ") 
-)
+```{r eval=FALSE}
+install.packages("tidymodels")
 ```
 
+The `tidymodels` framework is a collection of packages for modeling and machine learning using `tidyverse` principles.
+
+Read it [here](https://www.tidymodels.org/)
 ---
-# Subsetting strings
+# How to work with tidymodels
 
-You can extract parts of a string using `str_sub()`. 
-
-`str_sub()` takes start and end arguments which give the (inclusive) position of the substring:
-
-```{r}
-head(
-  str_sub(grad$subject, start=1, end=3)
-)
-
-# negative numbers count backwards from end
-head(
-  str_sub(grad$Inst, start=-3, end=-1)
-)
-```
-
+![ ](img/tidymodels.png)
 ---
-# Maps
+# What is for next week?
 
-To use `maps library`
+Step 2 - Train the model (to be discussed next week!)
 
-The maps package contains world mapping data as well as routines for displaying maps of countries, regions etc. The data are stored and accessed via a simple database. High resolution versions of these databases are provided by an additional package (mapdata) and compatible routines to convert between different mapping projections are provided by the mapproj package.
-- maps
+Three concepts in specifying a model
 
+- Model type
+- Model mode
+- Model engine
+---
+# Let's have some pasta!
 
-```{r}
-library(maps)
-library(mapdata)
-library(sp)
-aus<-map("worldHires", "Australia", fill=TRUE, xlim=c(110,160),
-  ylim=c(-45,-5), mar=c(0,0,0,0))
-```
-
-
-
-
+![ ](img/pasta.png)
 
